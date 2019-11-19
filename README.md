@@ -110,7 +110,7 @@ docker build -t featuremap_util .
 ```
 docker run --name quip-maputil -v $(pwd)/input:/data/input -v $(pwd)/output:/data/output -itd featuremap_util
 
-./build.sh $(pwd)/input $(pwd)/output /path/to/wsi/dir
+./build.sh $(pwd)/input $(pwd)/output $(pwd)/wsi
 
 ```
 -->
