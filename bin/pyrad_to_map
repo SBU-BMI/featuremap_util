@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 # Pyradiomics to CSV to JSON
+# 1) python3.7 pyrad_to_map.py ../input ../tmp_out 12345
+# 2) python3.7 csv_to_json.py ../tmp_out ../output
 
 PROGNAME=$(basename "$0")
 

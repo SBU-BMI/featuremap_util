@@ -16,10 +16,9 @@ from calc.featuremap import write_map_from_matrix
 
 # startTime = datetime.now()
 
-# Check num args
 base = os.path.basename(__file__)
 if len(sys.argv) != 8:
-    print('\nUsage:\n    python ' + base + ' svs_name width height pred_file color_file output_dir exec_id')
+    print('\nUsage:\n    python3.7 ' + base + ' svs_name width height pred_file color_file output_dir exec_id')
     sys.exit(1)
 
 # Get arguments

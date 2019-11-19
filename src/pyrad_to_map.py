@@ -131,7 +131,7 @@ def process(input, output, exec_id):
 
 
 if __name__ == "__main__":
-    # Check num args
+    # python3.7 pyrad_to_map.py ../input ../output 12345
     base = os.path.basename(__file__)
     if len(sys.argv) != 4:
         prRed('\nUsage:\n    python ' + base + ' input_dir output_dir exec_id')

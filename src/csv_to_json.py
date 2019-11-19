@@ -93,7 +93,7 @@ def save_file(fName, data1, data2):
 if __name__ == '__main__':
     base = os.path.basename(__file__)
 
-    # Check num args
+    # python3.7 csv_to_json.py ../input ../output
     if len(sys.argv) < 3:
         prRed('\nUsage:\n    python ' + base + ' input_folder output_folder')
         sys.exit(1)
