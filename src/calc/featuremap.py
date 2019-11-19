@@ -37,10 +37,10 @@ def write_map_from_matrix(im, dim, filename, exec_id, bgr):
             "png_w": png_w,
             "png_h": png_h,
             "patch_w": 200,
-            "patch_h": 200
+            "patch_h": 200,
+            "exec_id": exec_id
         },
         "data": {
-            "exec_id" : exec_id,
             "locations": {
                 "i": x_arr,
                 "j": y_arr
