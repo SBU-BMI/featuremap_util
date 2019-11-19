@@ -1,17 +1,25 @@
 #!/usr/bin/env bash
 
-NORMAL="\\033[0;39m"
-RED="\\033[1;31m"
-# Check input
-if [[ "$#" -eq "0" ]]; then
-  echo "No arguments supplied"
-  printf "    ${RED}wsi type? svs, tif, or scn?${NORMAL}\n"
+PROGNAME=$(basename "$0")
+
+if [ "$#" -ne 2 ]; then
+  echo ""
+  echo "usage: "
+  echo "    ./$PROGNAME exec_id wsi_type"
+  echo ""
+  echo "    wsi_type: can be svs, tif, scn, etc"
   exit 1
 fi
 
-SECONDS=0
-
-/app/src/prediction_to_map.sh "/data/input" "/data/output" "/data/wsi" "$1"
-
-ELAPSED="Elapsed: $(($SECONDS / 3600))hrs $(($SECONDS / 60 % 60))min $(($SECONDS % 60))sec"
-echo "$ELAPSED"
+#if [[ "$#" -eq "0" ]]; then
+#  echo "No arguments supplied"
+#  printf "    ${RED}wsi type? svs, tif, or scn?${NORMAL}\n"
+#  exit 1
+#fi
+#
+#SECONDS=0
+#
+#/app/src/prediction_to_map.sh "/data/input" "/data/output" "/data/wsi" "$1"
+#
+#ELAPSED="Elapsed: $(($SECONDS / 3600))hrs $(($SECONDS / 60 % 60))min $(($SECONDS % 60))sec"
+#echo "$ELAPSED"

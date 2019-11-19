@@ -1,13 +1,14 @@
 #!/usr/bin/env bash
 
-NORMAL="\\033[0;39m"
-RED="\\033[1;31m"
-# Check input
-if [[ "$#" -eq  "0" ]]
-  then
-    echo "No arguments supplied"
-    printf "    ${RED}wsi type? svs, tif, or scn?${NORMAL}\n"
-    exit 1
+PROGNAME=$(basename "$0")
+
+if [ "$#" -ne 1 ]; then
+  echo ""
+  echo "usage: "
+  echo "    ./$PROGNAME wsi_type"
+  echo ""
+  echo "    wsi_type: can be svs, tif, scn, etc"
+  exit 1
 fi
 
 input='/data/input'
