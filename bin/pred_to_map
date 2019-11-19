@@ -13,5 +13,5 @@ fi
 
 exec_id="$1"
 wsi_type="$2"
-/app/src/prediction_to_map.sh "/data/input" "/data/output" "/data/wsi" "$exec_id" "$wsi_type"
+/app/src/prediction_to_map.sh "/data/input" "/data/output" "/data/wsi" "$wsi_type" "$exec_id"
 echo "$PROGNAME done."
