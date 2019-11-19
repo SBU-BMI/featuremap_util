@@ -50,11 +50,19 @@ for files in ${HEAT_LOC}/color-*; do
   COLOR=${files}
 
   # Find the slide
-  if [[ ! $(ls -1 ${SLIDES}/${SVS}*.$ext) ]]; then
-    echo "${SLIDES}/${SVS}.XXXX.$ext does not exist."
+  FILE="$(ls -1 ${SLIDES}/${SVS}*.$ext)"
+  if [ -f "$FILE" ]; then
+    echo "$FILE exists"
+    SVS_FILE=$(ls -1 ${SLIDES}/${SVS}*.$ext | head -n 1)
   else
-    SVS_FILE=$(ls -1 ${SLIDES}/${SVS}*.svs | head -n 1)
+    echo "$FILE does not exist"
   fi
+
+#  if [[ ! $(ls -1 ${SLIDES}/${SVS}*.$ext) ]]; then
+#    echo "${SLIDES}/${SVS}.XXXX.$ext does not exist."
+#  else
+#    SVS_FILE=$(ls -1 ${SLIDES}/${SVS}*.$ext | head -n 1)
+#  fi
 
   if [[ -z "$SVS_FILE" ]]; then
     echo "Could not find slide."
