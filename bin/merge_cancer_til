@@ -11,6 +11,7 @@ if [ "$#" -ne 2 ]; then
   exit 1
 fi
 
-ext="$1"
-python /app/src/merge_cancer_til.py  "/data/input/cancer" "/data/input/til" "/data/output" "/data/wsi" "$ext"
+exec_id="$1"
+wsi_type="$2"
+python /app/src/merge_cancer_til.py  "/data/input/cancer" "/data/input/til" "/data/output" "/data/wsi" "$wsi_type" "$exec_id"
 echo "$PROGNAME done."

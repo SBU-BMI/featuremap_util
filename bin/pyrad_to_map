@@ -1,12 +1,23 @@
 #!/usr/bin/env bash
 # Pyradiomics to CSV to JSON
 
+PROGNAME=$(basename "$0")
+
+if [ "$#" -ne 1 ]; then
+  echo ""
+  echo "usage: "
+  echo "    ./$PROGNAME exec_id"
+  exit 1
+fi
+
+exec_id="$1"
+
 uuid=$(python -c 'import sys,uuid; sys.stdout.write(uuid.uuid4().hex)') || uuid=$(uuidgen)
 mydir="/tmp/$uuid"
 mkdir -p "$mydir"
 input='/data/input'
 # Step 1
-python /app/src/pyrad_to_map.py "$input" "$mydir"
+python /app/src/pyrad_to_map.py "$input" "$mydir" "$exec_id"
 if [[ $? -eq 0 ]]
 then
   # Step 2

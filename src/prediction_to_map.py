@@ -18,8 +18,8 @@ from calc.featuremap import write_map_from_matrix
 
 # Check num args
 base = os.path.basename(__file__)
-if len(sys.argv) != 7:
-    print('\nUsage:\n    python ' + base + ' svs_name width height pred_file color_file output_dir')
+if len(sys.argv) != 8:
+    print('\nUsage:\n    python ' + base + ' svs_name width height pred_file color_file output_dir exec_id')
     sys.exit(1)
 
 # Get arguments
@@ -29,6 +29,7 @@ height = int(sys.argv[3])
 pred_file = sys.argv[4]
 color_file = sys.argv[5]
 output_dir = sys.argv[6]
+exec_id = sys.argv[7]
 
 # Get data from files
 pred, necr, patch_size = get_labeled_im(pred_file)
@@ -47,4 +48,4 @@ im = np.swapaxes(im, 0, 1)  # Transpose
 filename = output_dir + '/{}.png'.format(svs_name)
 # imageio.imwrite(filename, im)
 # print(base + ':', datetime.now() - startTime)
-write_map_from_matrix(im, [width, height], filename)
+write_map_from_matrix(im, [width, height], filename, exec_id, False)

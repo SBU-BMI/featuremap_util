@@ -11,6 +11,7 @@ if [ "$#" -ne 2 ]; then
   exit 1
 fi
 
-ext="$1"
-/app/src/prediction_to_map.sh "/data/input" "/data/output" "/data/wsi" "$ext"
+exec_id="$1"
+wsi_type="$2"
+/app/src/prediction_to_map.sh "/data/input" "/data/output" "/data/wsi" "$exec_id" "$wsi_type"
 echo "$PROGNAME done."

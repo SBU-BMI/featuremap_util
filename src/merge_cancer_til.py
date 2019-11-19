@@ -14,8 +14,8 @@ from calc.featuremap import write_map_from_matrix
 
 # Check num args
 base = os.path.basename(__file__)
-if len(sys.argv) != 6:
-    print('\nUsage:\n    python ' + base + ' cancer_pred_fol til_pred_fol output_fol wsi_fol slide_ext')
+if len(sys.argv) != 7:
+    print('\nUsage:\n    python ' + base + ' cancer_pred_fol til_pred_fol output_fol wsi_fol slide_ext exec_id')
     sys.exit(1)
 
 start_ind = 0
@@ -23,10 +23,11 @@ end_ind = 10000
 
 # input the path to cancer heatmap_txt and TIL heatmap_txt. Change the folders here!
 cancer_pred_fol = sys.argv[1]  # folder path containing the prediction-xxx files for cancer
-til_pred_fol = sys.argv[2]     # folder path containing the prediction-xxx files for TILs
-wsi_fol = sys.argv[4]          # folder path containing all the WSIs
-output_folder = sys.argv[3]    # output folder
+til_pred_fol = sys.argv[2]  # folder path containing the prediction-xxx files for TILs
+wsi_fol = sys.argv[4]  # folder path containing all the WSIs
+output_folder = sys.argv[3]  # output folder
 slide_extension = '.' + sys.argv[5]  # extension of the slide, can be .svs, .tiff, etc.
+exec_id = sys.argv[6]
 # done changing arguments
 
 if not os.path.exists(output_folder):
@@ -41,6 +42,8 @@ cancer_preds_files.sort()
 if end_ind > len(cancer_preds_files):
     end_ind = len(cancer_preds_files)
 cancer_preds_files = cancer_preds_files[start_ind:end_ind]
+
+
 # cancer_only = set(['TCGA-3C-AALI-01Z-00-DX1'])
 
 
@@ -175,7 +178,7 @@ def process_file(pred_fn):
     tissue[tissue >= 12] = 255
     combined[:, :, 0] = tissue
     # cv2.imwrite(res_file_png, combined)
-    write_map_from_matrix(combined, [width, height], res_file_png, True)
+    write_map_from_matrix(combined, [width, height], res_file_png, exec_id, True)
 
 
 pool = mp.Pool(processes=8)

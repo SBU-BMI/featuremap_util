@@ -8,8 +8,8 @@ error_exit() {
   exit 1
 }
 
-if [ "$#" -ne 4 ]; then
-  echo "Usage: $0 /data/input /data/output /data/wsi svs" >&2
+if [ "$#" -ne 5 ]; then
+  echo "Usage: $0 /data/input /data/output /data/wsi exec_id svs" >&2
   exit 1
 fi
 
@@ -28,7 +28,10 @@ echo "$output_dir"
 SLIDES="$3"
 echo "$SLIDES"
 
-ext="$4"
+exec_id="$4"
+echo "$exec_id"
+
+ext="$5"
 echo "$ext"
 
 # We get the slides based on what's in this heatmap_txt folder
@@ -64,7 +67,7 @@ for files in ${HEAT_LOC}/color-*; do
     grep "openslide.level\[0\].height" | awk '{print substr($2,2,length($2)-2);}')
 
   # Generate CSVs and PNGs.
-  python /app/src/prediction_to_map.py ${SVS} ${WIDTH} ${HEIGHT} ${PRED} ${COLOR} ${output_dir}
+  python /app/src/prediction_to_map.py ${SVS} ${WIDTH} ${HEIGHT} ${PRED} ${COLOR} ${output_dir} ${exec_id}
 done
 
 exit 0

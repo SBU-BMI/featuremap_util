@@ -43,7 +43,7 @@ def norm_ij(df):
     return df
 
 
-def get_meta(df):
+def get_meta(df, exec_id):
     # Create first row JSON
     imw = df['image_width'].iloc[0]  # at location 0, first row
     imh = df['image_height'].iloc[0]
@@ -55,7 +55,8 @@ def get_meta(df):
            "patch_w": str(pw),
            "patch_h": str(ph),
            "png_w": str(np.ceil(imw / pw).astype(int)),
-           "png_h": str(np.ceil(imh / ph).astype(int))}
+           "png_h": str(np.ceil(imh / ph).astype(int)),
+           "exec_id": str(exec_id)}
 
     return obj
 
@@ -83,7 +84,7 @@ def get_meta(df):
 #     return column_names, column_names_to_normalize
 
 
-def process(input, output):
+def process(input, output, exec_id):
     # Do for all files in directory:
     for filename in os.listdir(input):
         if filename.endswith(".csv"):
@@ -94,7 +95,7 @@ def process(input, output):
             except Exception as ex:
                 prRed('image_width column not found')
                 continue
-            meta = get_meta(df)
+            meta = get_meta(df, exec_id)
             
             # For utilizing all columns:
             # cols, column_names_to_normalize = get_columns(df)
@@ -132,10 +133,11 @@ def process(input, output):
 if __name__ == "__main__":
     # Check num args
     base = os.path.basename(__file__)
-    if len(sys.argv) != 3:
-        prRed('\nUsage:\n    python ' + base + ' input_dir output_dir')
+    if len(sys.argv) != 4:
+        prRed('\nUsage:\n    python ' + base + ' input_dir output_dir exec_id')
         sys.exit(1)
 
     input = sys.argv[1]  # input
     output = sys.argv[2]  # output
-    process(input, output)
+    exec_id = sys.argv[3]  # execution id
+    process(input, output, exec_id)

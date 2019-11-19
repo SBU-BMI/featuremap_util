@@ -5,7 +5,7 @@ import sys
 
 
 # Write feature map
-def write_map_from_matrix(im, dim, filename, bgr=False):
+def write_map_from_matrix(im, dim, filename, exec_id, bgr):
     # startTime = datetime.now()
     png_w = im.shape[1]
     png_h = im.shape[0]
@@ -40,6 +40,7 @@ def write_map_from_matrix(im, dim, filename, bgr=False):
             "patch_h": 200
         },
         "data": {
+            "exec_id" : exec_id,
             "locations": {
                 "i": x_arr,
                 "j": y_arr
