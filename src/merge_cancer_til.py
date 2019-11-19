@@ -12,7 +12,7 @@ import openslide
 from calc.dice_auc_cal import *
 from calc.featuremap import write_map_from_matrix
 
-# Check num args
+# CMD: python3.7 merge_cancer_til.py ../input/cancer ../input/til ../output ../wsi svs 12345
 base = os.path.basename(__file__)
 if len(sys.argv) != 7:
     print('\nUsage:\n    python ' + base + ' cancer_pred_fol til_pred_fol output_fol wsi_fol slide_ext exec_id')
