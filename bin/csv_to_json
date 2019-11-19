@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
 
+PROGNAME=$(basename "$0")
 python /app/src/csv_to_json.py "/data/input" "/data/output"
 echo "$PROGNAME done."
