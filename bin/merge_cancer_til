@@ -12,10 +12,5 @@ if [ "$#" -ne 2 ]; then
 fi
 
 ext="$1"
-
-SECONDS=0
-
 python /app/src/merge_cancer_til.py  "/data/input/cancer" "/data/input/til" "/data/output" "/data/wsi" "$ext"
-
-ELAPSED="Elapsed: $(($SECONDS / 3600))hrs $(($SECONDS / 60 % 60))min $(($SECONDS % 60))sec"
-echo "$ELAPSED"
+echo "$PROGNAME done."
