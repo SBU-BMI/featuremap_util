@@ -20,27 +20,15 @@ fi
 # For example:
 #   prediction-TCGA-XX-XXXX-01Z-00-DX1
 HEAT_LOC="$1"
-echo "$HEAT_LOC"
-
 output_dir="$2"
-echo "$output_dir"
-
-# This is used for getting wsi width and height
 SLIDES="$3"
-echo "$SLIDES"
-
 ext="$4"
-echo "$ext"
-
 exec_id="$5"
-echo "$exec_id"
+found=0
 
 # We get the slides based on what's in this heatmap_txt folder
-for files in ${HEAT_LOC}/color-*; do
-
-  if [ ${files[0]} == "${HEAT_LOC}/color-*" ]; then
-    error_exit "There are no color files." $LINENO
-  fi
+for files in $HEAT_LOC/color-*; do
+  found=1
 
   # From the color- file name, deduce the matching slide name (minus the extension)
   SVS=$(echo ${files} | awk -F'/' '{print $NF}' | awk -F'color-' '{print $2}')
@@ -52,20 +40,9 @@ for files in ${HEAT_LOC}/color-*; do
   # Find the slide
   FILE="$(ls -1 ${SLIDES}/${SVS}*.$ext)"
   if [ -f "$FILE" ]; then
-    echo "$FILE exists"
     SVS_FILE=$(ls -1 ${SLIDES}/${SVS}*.$ext | head -n 1)
   else
     echo "$FILE does not exist"
-  fi
-
-#  if [[ ! $(ls -1 ${SLIDES}/${SVS}*.$ext) ]]; then
-#    echo "${SLIDES}/${SVS}.XXXX.$ext does not exist."
-#  else
-#    SVS_FILE=$(ls -1 ${SLIDES}/${SVS}*.$ext | head -n 1)
-#  fi
-
-  if [[ -z "$SVS_FILE" ]]; then
-    echo "Could not find slide."
     continue
   fi
 
@@ -76,7 +53,11 @@ for files in ${HEAT_LOC}/color-*; do
     grep "openslide.level\[0\].height" | awk '{print substr($2,2,length($2)-2);}')
 
   # Generate CSVs and PNGs.
-  python ./prediction_to_map.py ${SVS} ${WIDTH} ${HEIGHT} ${PRED} ${COLOR} ${output_dir} ${exec_id}
+  python "$(pwd)/prediction_to_map.py" ${SVS} ${WIDTH} ${HEIGHT} ${PRED} ${COLOR} ${output_dir} ${exec_id}
 done
+
+if [ $found == 0 ]; then
+  error_exit "There are no color files."
+fi
 
 exit 0
