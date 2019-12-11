@@ -3,8 +3,8 @@ import os
 import sys
 # import imageio
 import numpy as np
-import pyrad_to_map
 from calc.featuremap import *
+from pyrad_to_map import *
 
 from calc.get_labeled_im import *
 from calc.get_tissue_map import get_tissue_map
@@ -26,9 +26,10 @@ exec_id = sys.argv[7]
 
 pred_data = []
 if has_header(pred_file):
-    print()
+    print(pred_file, exec_id, width, height)
+    classification(pred_file, exec_id, width, height)
 else:
-    # pred_data = np.loadtxt(pred_file).astype(np.float32)
+    pred_data = np.loadtxt(pred_file).astype(np.float32)
     pred, necr, patch_size = get_labeled_im(pred_file)
     whiteness, blackness, redness = get_wbr_im(color_file)
 
