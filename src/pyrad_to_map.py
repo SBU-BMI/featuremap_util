@@ -61,6 +61,19 @@ def get_meta(df, exec_id):
     return obj
 
 
+def get_meta(imw, imh, pw, ph, exec_id):
+
+    obj = {"img_width": str(imw),
+           "img_height": str(imh),
+           "patch_w": str(pw),
+           "patch_h": str(ph),
+           "png_w": str(np.ceil(imw / pw).astype(int)),
+           "png_h": str(np.ceil(imh / ph).astype(int)),
+           "exec_id": str(exec_id)}
+
+    return obj
+
+
 # This function is for utilizing ALL columns in spreadsheet:
 def get_columns(df, x_name, y_name, w_name, h_name, rem):
     # Normalize to PNG dimensions
@@ -132,8 +145,13 @@ def process(df, filename, output, exec_id):
         df.to_csv(f, mode='a', header=False, index=False)
 
 
-def classification():
-    print()
+def classification(text_file, exec_id, imw, imh):
+    pred_data = np.loadtxt(text_file, skiprows=1).astype(np.float32)
+    x = pred_data[:, 0]
+    patch_size = (x.min() + x.max()) / len(np.unique(x))
+    df = pd.read_csv(text_file, index_col=0, delim_whitespace=True)
+    print(get_meta(imw, imh, patch_size, patch_size, exec_id))
+    exit(0)
 
 
 if __name__ == "__main__":
