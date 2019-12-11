@@ -62,72 +62,78 @@ def get_meta(df, exec_id):
 
 
 # This function is for utilizing ALL columns in spreadsheet:
-# def get_columns(df):
-#     # Normalize to PNG dimensions
-#     df['i'] = df['patch_x'] / df['patch_width']  # divide each x in the series by patch width
-#     df['j'] = df['patch_y'] / df['patch_height']
-#
-#     # Round up to whole numbers
-#     df.i = np.ceil(df.i).astype(int)
-#     df.j = np.ceil(df.j).astype(int)
-#
-#     to_be_removed = ['case_id', 'image_width', 'image_height', 'mpp_x', 'mpp_y', 'patch_x', 'patch_y', 'patch_width',
-#                      'patch_height', 'datetime', 'i', 'j']
-#     column_names_to_normalize = []
-#     cols = list(df.columns)
-#     column_names = ['i', 'j']
-#     for c in cols:
-#         if c not in to_be_removed:
-#             column_names.append(c)  # column that we want
-#             if c not in 'i' and c not in 'j':
-#                 column_names_to_normalize.append(c)
-#     return column_names, column_names_to_normalize
+def get_columns(df, x_name, y_name, w_name, h_name, rem):
+    # Normalize to PNG dimensions
+    # df['i'] = df['patch_x'] / df['patch_width']  # divide each x in the series by patch width
+    # df['j'] = df['patch_y'] / df['patch_height']
+
+    df['i'] = df[x_name] / df[w_name]  # divide each x in the series by patch width
+    df['j'] = df[y_name] / df[h_name]
+
+    # Round up to whole numbers
+    df.i = np.ceil(df.i).astype(int)
+    df.j = np.ceil(df.j).astype(int)
+
+    if rem:
+        to_be_removed = ['case_id', 'image_width', 'image_height', 'mpp_x', 'mpp_y', 'patch_x', 'patch_y',
+                         'patch_width',
+                         'patch_height', 'datetime', 'i', 'j']
+
+    column_names_to_normalize = []
+    cols = list(df.columns)
+    column_names = ['i', 'j']
+
+    if rem:
+        for c in cols:
+            if c not in to_be_removed:
+                column_names.append(c)  # column that we want
+                if c not in 'i' and c not in 'j':
+                    column_names_to_normalize.append(c)
+    else:
+        for c in cols:
+            column_names.append(c)  # column that we want
+            if c not in 'i' and c not in 'j':
+                column_names_to_normalize.append(c)
+
+    return column_names, column_names_to_normalize
 
 
-def process(input, output, exec_id):
-    # Do for all files in directory:
-    for filename in os.listdir(input):
-        if filename.endswith(".csv"):
-            fin = os.path.join(input, filename)
-            try:
-                df = pd.read_csv(fin)
-                var = df['image_width'].iloc[0]  # catch stuff that isn't pyradiomics
-            except Exception as ex:
-                prRed('image_width column not found')
-                continue
-            meta = get_meta(df, exec_id)
-            
-            # For utilizing all columns:
-            # cols, column_names_to_normalize = get_columns(df)
-            
-            # For the chosen 9 columns:
-            cols = ['i', 'j',
-                    'fg_firstorder_Mean', 'bg_firstorder_Mean', 'fg_firstorder_RootMeanSquared',
-                    'bg_firstorder_RootMeanSquared', 'fg_glcm_Autocorrelation', 'bg_glcm_Autocorrelation',
-                    'nuclei_ratio', 'nuclei_average_area', 'nuclei_average_perimeter']
+def process(df, filename, output, exec_id):
+    meta = get_meta(df, exec_id)
 
-            # For an experimental version of pyradiomics spreadsheet:
-            # cols = ['i', 'j', 'patch_area_micro', 'nuclei_area_micro', 'nuclei_ratio', 'nuclei_average_area',
-            #         'nuclei_average_perimeter']
+    # For utilizing all columns:
+    # cols, column_names_to_normalize = get_columns(df)
 
-            column_names_to_normalize = cols[2:]
-            column_names = ",".join(cols)
-            df = norm_ij(df)
+    # For the chosen 9 columns:
+    cols = ['i', 'j',
+            'fg_firstorder_Mean', 'bg_firstorder_Mean', 'fg_firstorder_RootMeanSquared',
+            'bg_firstorder_RootMeanSquared', 'fg_glcm_Autocorrelation', 'bg_glcm_Autocorrelation',
+            'nuclei_ratio', 'nuclei_average_area', 'nuclei_average_perimeter']
 
-            # Write first row JSON
-            fout = os.path.join(output, filename)
-            with open(fout, 'w') as f:
-                f.write(json.dumps(meta) + '\n')
-                f.write(column_names + '\n')
+    # For an experimental version of pyradiomics spreadsheet:
+    # cols = ['i', 'j', 'patch_area_micro', 'nuclei_area_micro', 'nuclei_ratio', 'nuclei_average_area',
+    #         'nuclei_average_perimeter']
 
-            df = df[cols]
-            df = normalize(df, column_names_to_normalize)
-            df = df.sort_values(['i', 'j'], ascending=[1, 1])
+    column_names_to_normalize = cols[2:]
+    column_names = ",".join(cols)
+    df = norm_ij(df)
 
-            with open(fout, 'a') as f:
-                df.to_csv(f, mode='a', header=False, index=False)
+    # Write first row JSON
+    fout = os.path.join(output, filename)
+    with open(fout, 'w') as f:
+        f.write(json.dumps(meta) + '\n')
+        f.write(column_names + '\n')
 
-    exit(0)
+    df = df[cols]
+    df = normalize(df, column_names_to_normalize)
+    df = df.sort_values(['i', 'j'], ascending=[1, 1])
+
+    with open(fout, 'a') as f:
+        df.to_csv(f, mode='a', header=False, index=False)
+
+
+def classification():
+    print()
 
 
 if __name__ == "__main__":
@@ -140,4 +146,17 @@ if __name__ == "__main__":
     input = sys.argv[1]  # input
     output = sys.argv[2]  # output
     exec_id = sys.argv[3]  # execution id
-    process(input, output, exec_id)
+
+    # Do for all files in directory:
+    for filename in os.listdir(input):
+        if filename.endswith(".csv"):
+            fin = os.path.join(input, filename)
+            try:
+                df = pd.read_csv(fin)
+                var = df['image_width'].iloc[0]  # catch stuff that isn't pyradiomics
+            except Exception as ex:
+                prRed('image_width column not found')
+                continue
+            process(input, output, exec_id)
+
+    exit(0)

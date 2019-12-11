@@ -1,7 +1,8 @@
 import json
 # import os
 import sys
-# from datetime import datetime
+import csv
+import re
 
 
 # Write feature map
@@ -65,3 +66,18 @@ def write_map_from_matrix(im, dim, filename, exec_id, bgr):
         print("Unexpected error:", sys.exc_info()[0])
         raise
     # print(os.path.basename(__file__) + ':', datetime.now() - startTime)
+
+
+def has_header(my_file):
+    ret_val = False
+    with open(my_file, 'r') as f:
+        reader = csv.reader(f, delimiter=' ')
+        # get header from first row
+        headers = next(reader)
+    try:
+        if re.match(r'^\w+$', headers[0]):
+            ret_val = True
+    except:
+        ret_val = False
+
+    return ret_val
