@@ -56,8 +56,8 @@ for files in $HEAT_LOC/color-*; do
   python "$(pwd)/prediction_to_map.py" ${SVS} ${WIDTH} ${HEIGHT} ${PRED} ${COLOR} ${output_dir} ${exec_id}
 done
 
-if [ $found == 0 ]; then
-  error_exit "There are no color files."
-fi
+#if [ $found == 0 ]; then
+#  error_exit "There are no color files."
+#fi
 
 exit 0

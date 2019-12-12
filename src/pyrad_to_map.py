@@ -43,8 +43,19 @@ def norm_ij(df):
     return df
 
 
+def norm_ij(df, patch_x, patch_y, patch_width, patch_height):
+    # Normalize to PNG dimensions
+    df['i'] = df[patch_x] / patch_width  # divide each x in the series by patch width
+    df['j'] = df[patch_y] / patch_height
+
+    # Round up to whole numbers
+    df.i = np.ceil(df.i).astype(int)
+    df.j = np.ceil(df.j).astype(int)
+
+    return df
+
+
 def get_meta(df, exec_id):
-    # Create first row JSON
     imw = df['image_width'].iloc[0]  # at location 0, first row
     imh = df['image_height'].iloc[0]
     pw = df['patch_width'].iloc[0]
@@ -62,7 +73,6 @@ def get_meta(df, exec_id):
 
 
 def get_meta(imw, imh, pw, ph, exec_id):
-
     obj = {"img_width": str(imw),
            "img_height": str(imh),
            "patch_w": str(pw),
@@ -75,13 +85,17 @@ def get_meta(imw, imh, pw, ph, exec_id):
 
 
 # This function is for utilizing ALL columns in spreadsheet:
-def get_columns(df, x_name, y_name, w_name, h_name, rem):
+# def get_columns(df, x_name, y_name, w_name, h_name, rem):
+def get_columns(df, x_name, y_name, pw, ph, rem):
     # Normalize to PNG dimensions
     # df['i'] = df['patch_x'] / df['patch_width']  # divide each x in the series by patch width
     # df['j'] = df['patch_y'] / df['patch_height']
 
-    df['i'] = df[x_name] / df[w_name]  # divide each x in the series by patch width
-    df['j'] = df[y_name] / df[h_name]
+    # df['i'] = df[x_name] / df[w_name]  # divide each x in the series by patch width
+    # df['j'] = df[y_name] / df[h_name]
+
+    df['j'] = df[y_name] / ph
+    df['i'] = df[x_name] / pw  # divide each x in the series by patch width
 
     # Round up to whole numbers
     df.i = np.ceil(df.i).astype(int)
@@ -149,32 +163,56 @@ def classification(text_file, exec_id, imw, imh):
     pred_data = np.loadtxt(text_file, skiprows=1).astype(np.float32)
     x = pred_data[:, 0]
     patch_size = (x.min() + x.max()) / len(np.unique(x))
+
     df = pd.read_csv(text_file, index_col=0, delim_whitespace=True)
-    print(get_meta(imw, imh, patch_size, patch_size, exec_id))
+    meta = get_meta(imw, imh, patch_size, patch_size, exec_id)
+
+    cols = df.columns
+
+    cols, column_names_to_normalize = get_columns(df, cols[0], cols[1], patch_size, patch_size, False)
+
+    column_names = ",".join(cols)
+    df = norm_ij(df, cols[0], cols[1], patch_size, patch_size)
+
+    # Write first row JSON
+    # fout = os.path.join(output, filename)
+    fout = 'testing.json'
+    with open(fout, 'w') as f:
+        f.write(json.dumps(meta) + '\n')
+        f.write(column_names + '\n')
+
+    df = df[cols]
+    df = normalize(df, column_names_to_normalize)
+    df = df.sort_values(['i', 'j'], ascending=[1, 1])
+
+    with open(fout, 'a') as f:
+        df.to_csv(f, mode='a', header=False, index=False)
+
     exit(0)
 
 
 if __name__ == "__main__":
-    # python3.7 pyrad_to_map.py ../input ../output 12345
-    base = os.path.basename(__file__)
-    if len(sys.argv) != 4:
-        prRed('\nUsage:\n    python ' + base + ' input_dir output_dir exec_id')
-        sys.exit(1)
-
-    input = sys.argv[1]  # input
-    output = sys.argv[2]  # output
-    exec_id = sys.argv[3]  # execution id
-
-    # Do for all files in directory:
-    for filename in os.listdir(input):
-        if filename.endswith(".csv"):
-            fin = os.path.join(input, filename)
-            try:
-                df = pd.read_csv(fin)
-                var = df['image_width'].iloc[0]  # catch stuff that isn't pyradiomics
-            except Exception as ex:
-                prRed('image_width column not found')
-                continue
-            process(input, output, exec_id)
+    classification('../input/prediction-001738-000001_01_20180504-multires', 'snoopy', 80900, 67432)
+    # # python3.7 pyrad_to_map.py ../input ../output 12345
+    # base = os.path.basename(__file__)
+    # if len(sys.argv) != 4:
+    #     prRed('\nUsage:\n    python ' + base + ' input_dir output_dir exec_id')
+    #     sys.exit(1)
+    #
+    # input = sys.argv[1]  # input
+    # output = sys.argv[2]  # output
+    # exec_id = sys.argv[3]  # execution id
+    #
+    # # Do for all files in directory:
+    # for filename in os.listdir(input):
+    #     if filename.endswith(".csv"):
+    #         fin = os.path.join(input, filename)
+    #         try:
+    #             df = pd.read_csv(fin)
+    #             var = df['image_width'].iloc[0]  # catch stuff that isn't pyradiomics
+    #         except Exception as ex:
+    #             prRed('image_width column not found')
+    #             continue
+    #         process(input, output, exec_id)
 
     exit(0)
