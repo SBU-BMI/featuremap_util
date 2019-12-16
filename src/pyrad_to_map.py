@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+
+from csv_to_json import *
 import json
 import os
 import sys
@@ -32,7 +34,7 @@ def normalize(df, column_names_to_normalize):
 
 
 def norm_ij(df):
-    # Normalize to PNG dimensions
+    # Set i,j
     df['i'] = df['patch_x'] / df['patch_width']  # divide each x in the series by patch width
     df['j'] = df['patch_y'] / df['patch_height']
 
@@ -43,19 +45,25 @@ def norm_ij(df):
     return df
 
 
-def norm_ij(df, patch_x, patch_y, patch_width, patch_height):
-    # Normalize to PNG dimensions
-    df['i'] = df[patch_x] / patch_width  # divide each x in the series by patch width
-    df['j'] = df[patch_y] / patch_height
+def norm_ij(df, cols, patch_size):
+    # Set i, j
+    i = cols[0]
+    j = cols[1]
+    df[i] = df[i] / patch_size  # divide each x in the series by patch width
+    df[j] = df[j] / patch_size
 
     # Round up to whole numbers
-    df.i = np.ceil(df.i).astype(int)
-    df.j = np.ceil(df.j).astype(int)
+    df[i] = np.ceil(df[i]).astype(int)
+    df[j] = np.ceil(df[j]).astype(int)
+
+    df.rename(columns={df.columns[0]: "i"}, inplace=True)
+    df.rename(columns={df.columns[1]: "j"}, inplace=True)
 
     return df
 
 
 def get_meta(df, exec_id):
+    # Create JSON metadata
     imw = df['image_width'].iloc[0]  # at location 0, first row
     imh = df['image_height'].iloc[0]
     pw = df['patch_width'].iloc[0]
@@ -85,44 +93,26 @@ def get_meta(imw, imh, pw, ph, exec_id):
 
 
 # This function is for utilizing ALL columns in spreadsheet:
-# def get_columns(df, x_name, y_name, w_name, h_name, rem):
-def get_columns(df, x_name, y_name, pw, ph, rem):
-    # Normalize to PNG dimensions
-    # df['i'] = df['patch_x'] / df['patch_width']  # divide each x in the series by patch width
-    # df['j'] = df['patch_y'] / df['patch_height']
-
-    # df['i'] = df[x_name] / df[w_name]  # divide each x in the series by patch width
-    # df['j'] = df[y_name] / df[h_name]
-
-    df['j'] = df[y_name] / ph
-    df['i'] = df[x_name] / pw  # divide each x in the series by patch width
-
-    # Round up to whole numbers
-    df.i = np.ceil(df.i).astype(int)
-    df.j = np.ceil(df.j).astype(int)
-
-    if rem:
-        to_be_removed = ['case_id', 'image_width', 'image_height', 'mpp_x', 'mpp_y', 'patch_x', 'patch_y',
-                         'patch_width',
-                         'patch_height', 'datetime', 'i', 'j']
-
-    column_names_to_normalize = []
-    cols = list(df.columns)
-    column_names = ['i', 'j']
-
-    if rem:
-        for c in cols:
-            if c not in to_be_removed:
-                column_names.append(c)  # column that we want
-                if c not in 'i' and c not in 'j':
-                    column_names_to_normalize.append(c)
-    else:
-        for c in cols:
-            column_names.append(c)  # column that we want
-            if c not in 'i' and c not in 'j':
-                column_names_to_normalize.append(c)
-
-    return column_names, column_names_to_normalize
+# def get_columns(df):
+#     # Set i,j
+#     df['i'] = df['patch_x'] / df['patch_width']  # divide each x in the series by patch width
+#     df['j'] = df['patch_y'] / df['patch_height']
+#
+#     # Round up to whole numbers
+#     df.i = np.ceil(df.i).astype(int)
+#     df.j = np.ceil(df.j).astype(int)
+#
+#     to_be_removed = ['case_id', 'image_width', 'image_height', 'mpp_x', 'mpp_y', 'patch_x', 'patch_y', 'patch_width',
+#                      'patch_height', 'datetime', 'i', 'j']
+#     column_names_to_normalize = []
+#     cols = list(df.columns)
+#     column_names = ['i', 'j']
+#     for c in cols:
+#         if c not in to_be_removed:
+#             column_names.append(c)  # column that we want
+#             if c not in 'i' and c not in 'j':
+#                 column_names_to_normalize.append(c)
+#     return column_names, column_names_to_normalize
 
 
 def process(df, filename, output, exec_id):
@@ -152,6 +142,7 @@ def process(df, filename, output, exec_id):
         f.write(column_names + '\n')
 
     df = df[cols]
+    # Normalize 0-255
     df = normalize(df, column_names_to_normalize)
     df = df.sort_values(['i', 'j'], ascending=[1, 1])
 
@@ -160,40 +151,47 @@ def process(df, filename, output, exec_id):
 
 
 def classification(text_file, exec_id, imw, imh):
+    print('text_file', text_file)
+    # Create multidimensional array from data.  Skip header row.
     pred_data = np.loadtxt(text_file, skiprows=1).astype(np.float32)
+    # Get all the x values
     x = pred_data[:, 0]
+    # Patch size
     patch_size = (x.min() + x.max()) / len(np.unique(x))
 
-    df = pd.read_csv(text_file, index_col=0, delim_whitespace=True)
+    df = pd.read_csv(text_file, delim_whitespace=True)
     meta = get_meta(imw, imh, patch_size, patch_size, exec_id)
 
-    cols = df.columns
+    df = norm_ij(df, df.columns, patch_size)
 
-    cols, column_names_to_normalize = get_columns(df, cols[0], cols[1], patch_size, patch_size, False)
+    fout = os.path.join('/data/output', text_file + '.csv')
 
-    column_names = ",".join(cols)
-    df = norm_ij(df, cols[0], cols[1], patch_size, patch_size)
-
-    # Write first row JSON
-    # fout = os.path.join(output, filename)
-    fout = 'testing.json'
+    column_names = ",".join(df.columns)
     with open(fout, 'w') as f:
         f.write(json.dumps(meta) + '\n')
         f.write(column_names + '\n')
 
-    df = df[cols]
-    df = normalize(df, column_names_to_normalize)
+    # Normalize data 0-255
+    df = normalize(df, df.columns[2:])
+
     df = df.sort_values(['i', 'j'], ascending=[1, 1])
 
     with open(fout, 'a') as f:
         df.to_csv(f, mode='a', header=False, index=False)
+
+    # Convert
+    meta = get_metadata(fout)
+    data = get_data(fout)
+    fout = fout.replace("csv", "json")
+    fout = fout.replace('/data/input', '/data/output')
+    save_file(fout, meta, data)
 
     exit(0)
 
 
 if __name__ == "__main__":
     classification('../input/prediction-001738-000001_01_20180504-multires', 'snoopy', 80900, 67432)
-    # # python3.7 pyrad_to_map.py ../input ../output 12345
+    # python3.7 pyrad_to_map.py ../input ../output 12345
     # base = os.path.basename(__file__)
     # if len(sys.argv) != 4:
     #     prRed('\nUsage:\n    python ' + base + ' input_dir output_dir exec_id')
