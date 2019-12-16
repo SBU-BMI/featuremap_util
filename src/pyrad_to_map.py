@@ -186,31 +186,29 @@ def classification(text_file, exec_id, imw, imh):
     fout = fout.replace('/data/input', '/data/output')
     save_file(fout, meta, data)
 
-    exit(0)
-
 
 if __name__ == "__main__":
-    classification('../input/prediction-001738-000001_01_20180504-multires', 'snoopy', 80900, 67432)
+    # classification('../input/prediction-001738-000001_01_20180504-multires', 'snoopy', 80900, 67432)
     # python3.7 pyrad_to_map.py ../input ../output 12345
-    # base = os.path.basename(__file__)
-    # if len(sys.argv) != 4:
-    #     prRed('\nUsage:\n    python ' + base + ' input_dir output_dir exec_id')
-    #     sys.exit(1)
-    #
-    # input = sys.argv[1]  # input
-    # output = sys.argv[2]  # output
-    # exec_id = sys.argv[3]  # execution id
-    #
-    # # Do for all files in directory:
-    # for filename in os.listdir(input):
-    #     if filename.endswith(".csv"):
-    #         fin = os.path.join(input, filename)
-    #         try:
-    #             df = pd.read_csv(fin)
-    #             var = df['image_width'].iloc[0]  # catch stuff that isn't pyradiomics
-    #         except Exception as ex:
-    #             prRed('image_width column not found')
-    #             continue
-    #         process(input, output, exec_id)
+    base = os.path.basename(__file__)
+    if len(sys.argv) != 4:
+        prRed('\nUsage:\n    python ' + base + ' input_dir output_dir exec_id')
+        sys.exit(1)
+
+    input = sys.argv[1]  # input
+    output = sys.argv[2]  # output
+    exec_id = sys.argv[3]  # execution id
+
+    # Do for all files in directory:
+    for filename in os.listdir(input):
+        if filename.endswith(".csv"):
+            fin = os.path.join(input, filename)
+            try:
+                df = pd.read_csv(fin)
+                var = df['image_width'].iloc[0]  # catch stuff that isn't pyradiomics
+            except Exception as ex:
+                prRed('image_width column not found')
+                continue
+            process(input, output, exec_id)
 
     exit(0)
