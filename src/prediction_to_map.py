@@ -11,7 +11,12 @@ from calc.get_tissue_map import get_tissue_map
 from calc.get_wbr_im import get_wbr_im
 from calc.featuremap import write_map_from_matrix
 
+
 base = os.path.basename(__file__)
+print("python script", base)
+print("len", len(sys.argv))
+
+
 if len(sys.argv) != 8:
     print('\nUsage:\n    python3.7 ' + base + ' svs_name width height pred_file color_file output_dir exec_id')
     sys.exit(1)
