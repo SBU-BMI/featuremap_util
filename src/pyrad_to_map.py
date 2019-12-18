@@ -151,40 +151,43 @@ def process(df, filename, output, exec_id):
 
 
 def classification(text_file, exec_id, imw, imh):
-    print('text_file', text_file)
-    # Create multidimensional array from data.  Skip header row.
-    pred_data = np.loadtxt(text_file, skiprows=1).astype(np.float32)
-    # Get all the x values
-    x = pred_data[:, 0]
-    # Patch size
-    patch_size = (x.min() + x.max()) / len(np.unique(x))
+    # Check for empty file
+    if os.stat("file").st_size == 0:
+        print('File is empty:', text_file)
+    else:
+        # Create multidimensional array from data.  Skip header row.
+        pred_data = np.loadtxt(text_file, skiprows=1).astype(np.float32)
+        # Get all the x values
+        x = pred_data[:, 0]
+        # Patch size
+        patch_size = (x.min() + x.max()) / len(np.unique(x))
 
-    df = pd.read_csv(text_file, delim_whitespace=True)
-    meta = get_meta(imw, imh, patch_size, patch_size, exec_id)
+        df = pd.read_csv(text_file, delim_whitespace=True)
+        meta = get_meta(imw, imh, patch_size, patch_size, exec_id)
 
-    df = norm_ij(df, df.columns, patch_size)
+        df = norm_ij(df, df.columns, patch_size)
 
-    fout = os.path.join('/data/output', text_file + '.csv')
+        fout = os.path.join('/data/output', text_file + '.csv')
 
-    column_names = ",".join(df.columns)
-    with open(fout, 'w') as f:
-        f.write(json.dumps(meta) + '\n')
-        f.write(column_names + '\n')
+        column_names = ",".join(df.columns)
+        with open(fout, 'w') as f:
+            f.write(json.dumps(meta) + '\n')
+            f.write(column_names + '\n')
 
-    # Normalize data 0-255
-    df = normalize(df, df.columns[2:])
+        # Normalize data 0-255
+        df = normalize(df, df.columns[2:])
 
-    df = df.sort_values(['i', 'j'], ascending=[1, 1])
+        df = df.sort_values(['i', 'j'], ascending=[1, 1])
 
-    with open(fout, 'a') as f:
-        df.to_csv(f, mode='a', header=False, index=False)
+        with open(fout, 'a') as f:
+            df.to_csv(f, mode='a', header=False, index=False)
 
-    # Convert
-    meta = get_metadata(fout)
-    data = get_data(fout)
-    fout = fout.replace("csv", "json")
-    fout = fout.replace('/data/input', '/data/output')
-    save_file(fout, meta, data)
+        # Convert
+        meta = get_metadata(fout)
+        data = get_data(fout)
+        fout = fout.replace("csv", "json")
+        fout = fout.replace('/data/input', '/data/output')
+        save_file(fout, meta, data)
 
 
 if __name__ == "__main__":
