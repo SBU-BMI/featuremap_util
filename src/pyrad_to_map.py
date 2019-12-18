@@ -1,13 +1,17 @@
 #!/usr/bin/env python
 
-from csv_to_json import *
 import json
 import os
 import sys
+import warnings
 
 import numpy as np
 import pandas as pd
 from sklearn import preprocessing
+
+from csv_to_json import *
+
+warnings.filterwarnings("error")
 
 
 def prRed(skk): print("\033[91m {}\033[00m".format(skk))
@@ -155,8 +159,14 @@ def classification(text_file, exec_id, imw, imh):
     if os.stat("file").st_size == 0:
         print('File is empty:', text_file)
     else:
-        # Create multidimensional array from data.  Skip header row.
-        pred_data = np.loadtxt(text_file, skiprows=1).astype(np.float32)
+        try:
+            # Create multidimensional array from data.  Skip header row.
+            pred_data = np.loadtxt(text_file, skiprows=1).astype(np.float32)
+        except RuntimeWarning:
+            # Warning empty file
+            print('File is empty:', text_file)
+            return False
+
         # Get all the x values
         x = pred_data[:, 0]
         # Patch size
