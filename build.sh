@@ -11,8 +11,8 @@ if [[ "$#" -eq "0" ]]; then
   exit 1
 fi
 
-IMAGE_NAME="quip_distro_maputil"
-CONTAINER_NAME="quip-maputil"
+IMAGE_NAME="maputil_dev"
+CONTAINER_NAME="maputil-dev"
 
 build() {
   docker stop $CONTAINER_NAME; docker rm $CONTAINER_NAME || echo "It's ok. Moving on..."
