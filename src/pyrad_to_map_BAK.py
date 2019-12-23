@@ -12,6 +12,7 @@ from sklearn import preprocessing
 from csv_to_json import *
 
 warnings.filterwarnings("error")
+pd.options.mode.chained_assignment = None  # default='warn'
 
 
 def prRed(skk): print("\033[91m {}\033[00m".format(skk))
@@ -20,21 +21,21 @@ def prRed(skk): print("\033[91m {}\033[00m".format(skk))
 def normalize(df, column_names_to_normalize):
     try:
         # Convert non-numeric value 'None' to zero
-        df.replace(r'None', '0', regex=True, inplace=True)
-        df.apply(pd.to_numeric)
-        x = df[column_names_to_normalize].values  # returns a numpy array
+        temp = df.replace(r'None', '0', regex=True, inplace=False)
+        temp.apply(pd.to_numeric)
+        x = temp[column_names_to_normalize].values  # returns a numpy array
         # Normalize 0 to 255
         min_max_scaler = preprocessing.MinMaxScaler(feature_range=(0, 255))
         x_scaled = min_max_scaler.fit_transform(x)
         df_temp = pd.DataFrame(x_scaled, columns=column_names_to_normalize, index=df.index)
         # Merge back into original dataframe
-        df[column_names_to_normalize] = df_temp
+        temp[column_names_to_normalize] = df_temp
     except ValueError as ex:
         # Catch outlier non-numeric values and exit
         prRed('FOUND NON-NUMERIC VALUES IN DATA COLUMNS')
         prRed(ex)
         exit(1)
-    return df
+    return temp
 
 
 def norm_ij_1(df):
@@ -145,7 +146,8 @@ def process(df, filename, output, exec_id):
         f.write(json.dumps(meta) + '\n')
         f.write(column_names + '\n')
 
-    df = df[cols]
+    df = df[cols]  # only the columns that we need
+
     # Normalize 0-255
     df = normalize(df, column_names_to_normalize)
     df = df.sort_values(['i', 'j'], ascending=[1, 1])
@@ -220,15 +222,15 @@ if __name__ == "__main__":
 
     # Do for all files in directory:
     for filename in os.listdir(input):
-        print('File:', filename)
         if filename.endswith(".csv"):
+            print('File:', filename)
             fin = os.path.join(input, filename)
             try:
-                df = pd.read_csv(fin)
-                var = df['image_width'].iloc[0]  # catch stuff that isn't pyradiomics
+                data = pd.read_csv(fin)
+                var = data['image_width'].iloc[0]  # catch stuff that isn't pyradiomics
             except Exception as ex:
                 prRed('image_width column not found')
                 continue
-            process(df, filename, output, exec_id)
+            process(data, filename, output, exec_id)
 
     exit(0)
