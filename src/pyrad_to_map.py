@@ -37,7 +37,7 @@ def normalize(df, column_names_to_normalize):
     return df
 
 
-def norm_ij(df):
+def norm_ij_1(df):
     # Set i,j
     df['i'] = df['patch_x'] / df['patch_width']  # divide each x in the series by patch width
     df['j'] = df['patch_y'] / df['patch_height']
@@ -137,7 +137,7 @@ def process(df, filename, output, exec_id):
 
     column_names_to_normalize = cols[2:]
     column_names = ",".join(cols)
-    df = norm_ij(df)
+    df = norm_ij_1(df)
 
     # Write first row JSON
     fout = os.path.join(output, filename)
@@ -220,6 +220,7 @@ if __name__ == "__main__":
 
     # Do for all files in directory:
     for filename in os.listdir(input):
+        print('File:', filename)
         if filename.endswith(".csv"):
             fin = os.path.join(input, filename)
             try:
