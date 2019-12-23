@@ -76,7 +76,6 @@ def get_patch_size1(filepath, w_png, h_png):
 
 
 def main(png_fol, out_fol, wsi_fol, slide_ext):
-#     startTime = datetime.now()
 
     # Iterate through pngs in input folder
     fns = [f for f in os.listdir(png_fol) if '.png' in f]
@@ -135,6 +134,7 @@ def main(png_fol, out_fol, wsi_fol, slide_ext):
                         feature_writer.writerow([x, y, png[y, x][2], png[y, x][1], png[y, x][0]])
 
         f.close()
+
 
 #     print(os.path.basename(__file__) + ':', datetime.now() - startTime)
 

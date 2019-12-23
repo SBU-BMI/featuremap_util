@@ -1,18 +1,17 @@
 #!/usr/bin/env bash
+# ./build.sh "$(pwd)/input" "$(pwd)/output" "$(pwd)/wsi"
 
 PROGNAME=$(basename "$0")
-# Output colors
 NORMAL="\\033[0;39m"
 RED="\\033[1;31m"
-# Check input
+
 if [[ "$#" -eq "0" ]]; then
   echo "No arguments supplied"
   printf "    ${RED}usage: $PROGNAME /path/to/input/dir /path/to/output/dir /path/to/wsi/dir$1${NORMAL}\n"
   exit 1
 fi
 
-# Names to identify images and containers of this app
-IMAGE_NAME='quip_distro_maputil'
+IMAGE_NAME="quip_distro_maputil"
 CONTAINER_NAME="quip-maputil"
 
 build() {

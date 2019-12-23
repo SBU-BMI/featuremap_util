@@ -168,7 +168,13 @@ def classification(text_file, exec_id, imw, imh):
             return False
 
         # Get all the x values
-        x = pred_data[:, 0]
+        try:
+            x = pred_data[:, 0]
+        except IndexError:
+            # File empty
+            # File has header and one empty line
+            return False
+
         # Patch size
         patch_size = (x.min() + x.max()) / len(np.unique(x))
 
