@@ -66,7 +66,7 @@ def norm_ij(df, cols, patch_size):
     return df
 
 
-def get_meta(df, exec_id):
+def get_meta_from_file(df, exec_id):
     # Create JSON metadata
     imw = df['image_width'].iloc[0]  # at location 0, first row
     imh = df['image_height'].iloc[0]
@@ -120,7 +120,7 @@ def get_meta(imw, imh, pw, ph, exec_id):
 
 
 def process(df, filename, output, exec_id):
-    meta = get_meta(df, exec_id)
+    meta = get_meta_from_file(df, exec_id)
 
     # For utilizing all columns:
     # cols, column_names_to_normalize = get_columns(df)
