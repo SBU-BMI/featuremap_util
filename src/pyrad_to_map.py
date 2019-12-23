@@ -88,6 +88,7 @@ def process(input, output, exec_id):
     # Do for all files in directory:
     for filename in os.listdir(input):
         if filename.endswith(".csv"):
+            print("File:", filename)
             fin = os.path.join(input, filename)
             try:
                 df = pd.read_csv(fin)
@@ -127,8 +128,6 @@ def process(input, output, exec_id):
             with open(fout, 'a') as f:
                 df.to_csv(f, mode='a', header=False, index=False)
 
-    exit(0)
-
 
 if __name__ == "__main__":
     # python3.7 pyrad_to_map.py ../input ../output 12345
@@ -141,3 +140,4 @@ if __name__ == "__main__":
     output = sys.argv[2]  # output
     exec_id = sys.argv[3]  # execution id
     process(input, output, exec_id)
+    exit(0)
