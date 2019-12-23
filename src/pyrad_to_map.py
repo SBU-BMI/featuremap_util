@@ -91,7 +91,7 @@ def process(input, output, exec_id):
             print("File:", filename)
             fin = os.path.join(input, filename)
             try:
-                df = pd.read_csv(fin)
+                df = pd.read_csv(fin, low_memory=False)
                 var = df['image_width'].iloc[0]  # catch stuff that isn't pyradiomics
             except Exception as ex:
                 prRed('image_width column not found')
