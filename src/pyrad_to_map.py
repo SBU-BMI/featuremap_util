@@ -228,6 +228,6 @@ if __name__ == "__main__":
             except Exception as ex:
                 prRed('image_width column not found')
                 continue
-            process(input, output, exec_id)
+            process(df, filename, output, exec_id)
 
     exit(0)
