@@ -91,7 +91,8 @@ def get_meta(imw, imh, pw, ph, exec_id):
            "patch_h": str(ph),
            "png_w": str(np.ceil(imw / pw).astype(int)),
            "png_h": str(np.ceil(imh / ph).astype(int)),
-           "exec_id": str(exec_id)}
+           "exec_id": str(exec_id),
+           "type": "gleason"}
 
     return obj
 
