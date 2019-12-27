@@ -33,14 +33,14 @@ for f in $color_files; do
   ## Check if the glob gets expanded to existing files.
   ## If not, f here will be exactly the pattern above
   ## and the exists test will evaluate to false.
-  [ -e "$f" ] && found=1 || echo found=0
+  [ -e "$f" ] && found=1 || echo "There are no color files."
 
   ## This is all we needed to know, so we can break after the first iteration
   break
 done
 
 if [[ $found -eq 0 ]]; then
-  echo "There are no color files."
+
   for files in $HEAT_LOC/prediction-*; do
 
     # From the prediction- file name, deduce the matching slide name (minus the extension)
