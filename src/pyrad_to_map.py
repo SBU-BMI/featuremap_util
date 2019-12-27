@@ -156,7 +156,7 @@ def process(df, filename, output, exec_id):
 
 def classification(text_file, exec_id, imw, imh):
     # Check for empty file
-    if os.stat("file").st_size == 0:
+    if os.stat(text_file).st_size == 0:
         print('File is empty:', text_file)
     else:
         try:
