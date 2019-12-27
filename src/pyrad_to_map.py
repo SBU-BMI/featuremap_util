@@ -145,7 +145,8 @@ def process(df, filename, output, exec_id):
         f.write(json.dumps(meta) + '\n')
         f.write(column_names + '\n')
 
-    df = df[cols]
+    df = df[cols]  # only the columns that we need
+
     # Normalize 0-255
     df = normalize(df, column_names_to_normalize)
     df = df.sort_values(['i', 'j'], ascending=[1, 1])
@@ -220,8 +221,8 @@ if __name__ == "__main__":
 
     # Do for all files in directory:
     for filename in os.listdir(input):
-        print('File:', filename)
         if filename.endswith(".csv"):
+            print('File:', filename)
             fin = os.path.join(input, filename)
             try:
                 df = pd.read_csv(fin)
