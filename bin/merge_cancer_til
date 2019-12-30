@@ -2,16 +2,15 @@
 
 PROGNAME=$(basename "$0")
 
-if [ "$#" -ne 2 ]; then
+if [ "$#" -ne 3 ]; then
   echo ""
   echo "usage: "
-  echo "    ./$PROGNAME exec_id wsi_type"
-  echo ""
-  echo "    wsi_type: can be svs, tif, scn, etc"
+  echo "    ./$PROGNAME exec_id exec_by wsi_type"
   exit 1
 fi
 
 exec_id="$1"
-wsi_type="$2"
-python /app/src/merge_cancer_til.py  "/data/input/cancer" "/data/input/til" "/data/output" "/data/wsi" "$wsi_type" "$exec_id"
+exec_by="$2"
+wsi_type="$3"
+python /app/src/merge_cancer_til.py  "/data/input/cancer" "/data/input/til" "/data/output" "/data/wsi" "$wsi_type" "$exec_id" "$exec_by"
 echo "$PROGNAME done."

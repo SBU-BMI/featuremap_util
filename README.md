@@ -37,7 +37,7 @@ wsi type can be svs, tif, scn, etc.
 cd input; mkdir til cancer
 # put input files in input/til and input/cancer
 # then run
-nohup docker exec quip-maputil merge_cancer_til exec_id wsi_type &
+nohup docker exec quip-maputil merge_cancer_til exec_id exec_by wsi_type &
 ```
 <br>
 

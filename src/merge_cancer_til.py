@@ -28,7 +28,7 @@ wsi_fol = sys.argv[4]  # folder path containing all the WSIs
 output_folder = sys.argv[3]  # output folder
 slide_extension = '.' + sys.argv[5]  # extension of the slide, can be .svs, .tiff, etc.
 exec_id = sys.argv[6]
-exec_by = sys.argv[8]
+exec_by = sys.argv[7]
 
 if not os.path.exists(output_folder):
     os.mkdir(output_folder)
@@ -178,7 +178,7 @@ def process_file(pred_fn):
     tissue[tissue >= 12] = 255
     combined[:, :, 0] = tissue
     # cv2.imwrite(res_file_png, combined)
-    write_map_from_matrix(combined, [width, height], res_file_png, exec_id, True)
+    write_map_from_matrix(combined, [width, height], res_file_png, exec_id, exec_by, True)
 
 
 pool = mp.Pool(processes=8)
