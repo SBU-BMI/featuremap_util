@@ -220,7 +220,7 @@ if __name__ == "__main__":
     input = sys.argv[1]  # input
     output = sys.argv[2]  # output
     exec_id = sys.argv[3]  # execution id
-    exec_by = sys.argv[4]  # execution id
+    exec_by = sys.argv[4]  # executed by
 
     # Do for all files in directory:
     for filename in os.listdir(input):
