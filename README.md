@@ -21,7 +21,7 @@ The following command takes two arguments: execution id, and wsi type.<br>
 wsi type can be svs, tif, scn, etc.
 
 ```
-nohup docker exec quip-maputil pred_to_map exec_id wsi_type &
+nohup docker exec quip-maputil pred_to_map exec_id exec_by wsi_type &
 ```
 <br>
 
@@ -37,7 +37,7 @@ wsi type can be svs, tif, scn, etc.
 cd input; mkdir til cancer
 # put input files in input/til and input/cancer
 # then run
-nohup docker exec quip-maputil merge_cancer_til exec_id wsi_type &
+nohup docker exec quip-maputil merge_cancer_til exec_id exec_by wsi_type &
 ```
 <br>
 
@@ -46,7 +46,7 @@ nohup docker exec quip-maputil merge_cancer_til exec_id wsi_type &
 We've generated a bunch of pyradiomics csv files.  Here's how to create featuremaps:
 
 ```
-docker exec quip-maputil pyrad_to_map exec_id
+docker exec quip-maputil pyrad_to_map exec_id exec_by
 ```
 <br>
 

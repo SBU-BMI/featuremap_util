@@ -79,7 +79,8 @@ def get_meta_from_file(df, exec_id):
            "patch_h": str(ph),
            "png_w": str(np.ceil(imw / pw).astype(int)),
            "png_h": str(np.ceil(imh / ph).astype(int)),
-           "exec_id": str(exec_id)}
+           "exec_id": str(exec_id),
+           "executed_by": str(exec_by)}
 
     return obj
 
@@ -120,17 +121,28 @@ def get_meta(imw, imh, pw, ph, exec_id):
 #     return column_names, column_names_to_normalize
 
 
-def process(df, filename, output, exec_id):
-    meta = get_meta_from_file(df, exec_id)
+def process(input, output, exec_id, exec_by):
+    # Do for all files in directory:
+    for filename in os.listdir(input):
+        if filename.endswith(".csv"):
+            print("File:", filename)
+            fin = os.path.join(input, filename)
+            try:
+                df = pd.read_csv(fin)
+                var = df['image_width'].iloc[0]  # catch stuff that isn't pyradiomics
+            except Exception as ex:
+                prRed('image_width column not found')
+                continue
+            meta = get_meta(df, exec_id, exec_by)
 
-    # For utilizing all columns:
-    # cols, column_names_to_normalize = get_columns(df)
+            # For utilizing all columns:
+            # cols, column_names_to_normalize = get_columns(df)
 
-    # For the chosen 9 columns:
-    cols = ['i', 'j',
-            'fg_firstorder_Mean', 'bg_firstorder_Mean', 'fg_firstorder_RootMeanSquared',
-            'bg_firstorder_RootMeanSquared', 'fg_glcm_Autocorrelation', 'bg_glcm_Autocorrelation',
-            'nuclei_ratio', 'nuclei_average_area', 'nuclei_average_perimeter']
+            # For the chosen 9 columns:
+            cols = ['i', 'j',
+                    'fg_firstorder_Mean', 'bg_firstorder_Mean', 'fg_firstorder_RootMeanSquared',
+                    'bg_firstorder_RootMeanSquared', 'fg_glcm_Autocorrelation', 'bg_glcm_Autocorrelation',
+                    'nuclei_ratio', 'nuclei_average_area', 'nuclei_average_perimeter']
 
     # For an experimental version of pyradiomics spreadsheet:
     # cols = ['i', 'j', 'patch_area_micro', 'nuclei_area_micro', 'nuclei_ratio', 'nuclei_average_area',
@@ -212,25 +224,13 @@ if __name__ == "__main__":
     # classification('../input/prediction-001738-000001_01_20180504-multires', 'snoopy', 80900, 67432)
     # python3.7 pyrad_to_map.py ../input ../output 12345
     base = os.path.basename(__file__)
-    if len(sys.argv) != 4:
-        prRed('\nUsage:\n    python ' + base + ' input_dir output_dir exec_id')
-        sys.exit(1)
+    if len(sys.argv) != 5:
+        prRed('\nUsage:\n    python ' + base + ' input_dir output_dir exec_id exec_by')
+        exit(1)
 
     input = sys.argv[1]  # input
     output = sys.argv[2]  # output
     exec_id = sys.argv[3]  # execution id
-
-    # Do for all files in directory:
-    for filename in os.listdir(input):
-        if filename.endswith(".csv"):
-            print('File:', filename)
-            fin = os.path.join(input, filename)
-            try:
-                df = pd.read_csv(fin)
-                var = df['image_width'].iloc[0]  # catch stuff that isn't pyradiomics
-            except Exception as ex:
-                prRed('image_width column not found')
-                continue
-            process(df, filename, output, exec_id)
-
+    exec_by = sys.argv[4]  # executed by
+    process(input, output, exec_id, exec_by)
     exit(0)

@@ -12,9 +12,9 @@ from calc.get_wbr_im import get_wbr_im
 from calc.featuremap import write_map_from_matrix
 
 base = os.path.basename(__file__)
-if len(sys.argv) != 8:
-    print('\nUsage:\n    python3.7 ' + base + ' svs_name width height pred_file color_file output_dir exec_id')
-    sys.exit(1)
+if len(sys.argv) != 9:
+    print('\nUsage:\n    python3.7 ' + base + ' svs_name width height pred_file color_file output_dir exec_id exec_by')
+    exit(1)
 
 svs_name = sys.argv[1]
 width = int(sys.argv[2])
@@ -23,6 +23,7 @@ pred_file = sys.argv[4]
 color_file = sys.argv[5]
 output_dir = sys.argv[6]
 exec_id = sys.argv[7]
+exec_by = sys.argv[8]
 
 pred_data = []
 if has_header(pred_file):

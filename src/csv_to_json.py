@@ -6,9 +6,6 @@ import sys
 import pandas as pd
 
 
-# from datetime import datetime
-
-
 def prRed(skk): print("\033[91m {}\033[00m".format(skk))
 
 
@@ -39,7 +36,7 @@ def get_metadata(filename):
         csv_file.close()
     except FileNotFoundError as e:
         print(filename, ":", e.strerror)
-        sys.exit(1)
+        exit(1)
     except:  # catch all exceptions
         print("Unexpected error:", sys.exc_info()[0])
         raise
@@ -96,9 +93,8 @@ if __name__ == '__main__':
     # python3.7 csv_to_json.py ../input ../output
     if len(sys.argv) < 3:
         prRed('\nUsage:\n    python ' + base + ' input_folder output_folder')
-        sys.exit(1)
+        exit(1)
 
-    # startTime = datetime.now()
     # Get args
     input_folder = sys.argv[1]  # Folder path
     output_folder = sys.argv[2]
@@ -114,5 +110,3 @@ if __name__ == '__main__':
             save_file(f, meta, data)
     if not files_exist:
         prRed("There were no files to process.")
-
-    # print(base + ':', datetime.now() - startTime)
