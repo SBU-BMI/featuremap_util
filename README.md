@@ -46,7 +46,7 @@ nohup docker exec quip-maputil merge_cancer_til exec_id exec_by wsi_type &
 We've generated a bunch of pyradiomics csv files.  Here's how to create featuremaps:
 
 ```
-docker exec quip-maputil pyrad_to_map exec_id
+docker exec quip-maputil pyrad_to_map exec_id exec_by
 ```
 <br>
 
