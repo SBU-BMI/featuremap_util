@@ -9,8 +9,8 @@ error_exit() {
 }
 
 if [ "$#" -ne 6 ]; then
-  # CMD: ./prediction_to_map.sh ../input ../output ../wsi svs 12345 someone@somewhere.com
-  echo "Usage: $0 /data/input /data/output /data/wsi svs exec_id exec_by email_addr" >&2
+  # CMD: ./prediction_to_map.sh ../input ../output ../wsi svs testEXEC someone@somewhere.com
+  echo "Usage: $0 /data/input /data/output /data/wsi svs exec_id exec_by" >&2
   exit 1
 fi
 
@@ -27,9 +27,20 @@ exec_id="$5"
 exec_by="$6"
 found=0
 
+color_files="$HEAT_LOC/color-*"
+for f in $color_files; do
+
+  ## Check if the glob gets expanded to existing files.
+  ## If not, f here will be exactly the pattern above
+  ## and the exists test will evaluate to false.
+  [ -e "$f" ] && found=1 || echo "There are no color files."
+
+  ## This is all we needed to know, so we can break after the first iteration
+  break
+done
+
 # We get the slides based on what's in this heatmap_txt folder
 for files in $HEAT_LOC/color-*; do
-  found=1
 
   # From the color- file name, deduce the matching slide name (minus the extension)
   SVS=$(echo ${files} | awk -F'/' '{print $NF}' | awk -F'color-' '{print $2}')
@@ -42,8 +53,10 @@ for files in $HEAT_LOC/color-*; do
   FILE="$(ls -1 ${SLIDES}/${SVS}*.$ext)"
   if [ -f "$FILE" ]; then
     SVS_FILE=$(ls -1 ${SLIDES}/${SVS}*.$ext | head -n 1)
-  else
-    echo "$FILE does not exist"
+  fi
+
+  if [ -z "$SVS_FILE" ]; then
+    echo "Could not find slide."
     continue
   fi
 
@@ -56,9 +69,5 @@ for files in $HEAT_LOC/color-*; do
   # Generate CSVs and PNGs.
   python "$(pwd)/prediction_to_map.py" ${SVS} ${WIDTH} ${HEIGHT} ${PRED} ${COLOR} ${output_dir} ${exec_id} ${exec_by}
 done
-
-if [ $found == 0 ]; then
-  error_exit "There are no color files."
-fi
 
 exit 0

@@ -31,8 +31,8 @@ def normalize(df, column_names_to_normalize):
     return df
 
 
-def norm_ij(df):
-    # Normalize to PNG dimensions
+def norm_ij_1(df):
+    # Set i,j
     df['i'] = df['patch_x'] / df['patch_width']  # divide each x in the series by patch width
     df['j'] = df['patch_y'] / df['patch_height']
 
@@ -43,8 +43,8 @@ def norm_ij(df):
     return df
 
 
-def get_meta(df, exec_id, exec_by):
-    # Create first row JSON
+def get_meta_from_file(df, exec_id, exec_by):
+    # Create JSON metadata
     imw = df['image_width'].iloc[0]  # at location 0, first row
     imh = df['image_height'].iloc[0]
     pw = df['patch_width'].iloc[0]
@@ -64,7 +64,7 @@ def get_meta(df, exec_id, exec_by):
 
 # This function is for utilizing ALL columns in spreadsheet:
 # def get_columns(df):
-#     # Normalize to PNG dimensions
+#     # Set i,j
 #     df['i'] = df['patch_x'] / df['patch_width']  # divide each x in the series by patch width
 #     df['j'] = df['patch_y'] / df['patch_height']
 #
@@ -97,7 +97,7 @@ def process(input, output, exec_id, exec_by):
             except Exception as ex:
                 prRed('image_width column not found')
                 continue
-            meta = get_meta(df, exec_id, exec_by)
+            meta = get_meta_from_file(df, exec_id, exec_by)
 
             # For utilizing all columns:
             # cols, column_names_to_normalize = get_columns(df)
@@ -114,7 +114,7 @@ def process(input, output, exec_id, exec_by):
 
             column_names_to_normalize = cols[2:]
             column_names = ",".join(cols)
-            df = norm_ij(df)
+            df = norm_ij_1(df)
 
             # Write first row JSON
             fout = os.path.join(output, filename)
@@ -122,7 +122,7 @@ def process(input, output, exec_id, exec_by):
                 f.write(json.dumps(meta) + '\n')
                 f.write(column_names + '\n')
 
-            df = df[cols]
+            df = df[cols]  # only the columns that we need
             df = normalize(df, column_names_to_normalize)
             df = df.sort_values(['i', 'j'], ascending=[1, 1])
 
@@ -131,7 +131,7 @@ def process(input, output, exec_id, exec_by):
 
 
 if __name__ == "__main__":
-    # python3.7 pyrad_to_map.py ../input ../output 12345 someone@somewhere.com
+    # python3.7 pyrad_to_map.py ../input ../output testEXEC someone@somewhere.com
     base = os.path.basename(__file__)
     if len(sys.argv) != 5:
         prRed('\nUsage:\n    python ' + base + ' input_dir output_dir exec_id exec_by')
