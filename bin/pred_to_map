@@ -12,6 +12,7 @@ if [ "$#" -ne 3 ]; then
 fi
 
 exec_id="$1"
-wsi_type="$2"
+exec_by="$2"
+wsi_type="$3"
 /app/src/prediction_to_map.sh "/data/input" "/data/output" "/data/wsi" "$wsi_type" "$exec_id" "$exec_by"
 echo "$PROGNAME done."

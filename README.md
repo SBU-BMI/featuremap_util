@@ -21,7 +21,7 @@ The following command takes two arguments: execution id, and wsi type.<br>
 wsi type can be svs, tif, scn, etc.
 
 ```
-nohup docker exec quip-maputil pred_to_map exec_id wsi_type &
+nohup docker exec quip-maputil pred_to_map exec_id exec_by wsi_type &
 ```
 <br>
 
