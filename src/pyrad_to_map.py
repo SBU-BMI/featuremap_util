@@ -43,7 +43,7 @@ def norm_ij(df):
     return df
 
 
-def get_meta(df, exec_id):
+def get_meta(df, exec_id, exec_by):
     # Create first row JSON
     imw = df['image_width'].iloc[0]  # at location 0, first row
     imh = df['image_height'].iloc[0]
@@ -56,7 +56,8 @@ def get_meta(df, exec_id):
            "patch_h": str(ph),
            "png_w": str(np.ceil(imw / pw).astype(int)),
            "png_h": str(np.ceil(imh / ph).astype(int)),
-           "exec_id": str(exec_id)}
+           "exec_id": str(exec_id),
+           "executed_by": str(exec_by)}
 
     return obj
 
@@ -84,7 +85,7 @@ def get_meta(df, exec_id):
 #     return column_names, column_names_to_normalize
 
 
-def process(input, output, exec_id):
+def process(input, output, exec_id, exec_by):
     # Do for all files in directory:
     for filename in os.listdir(input):
         if filename.endswith(".csv"):
@@ -96,11 +97,11 @@ def process(input, output, exec_id):
             except Exception as ex:
                 prRed('image_width column not found')
                 continue
-            meta = get_meta(df, exec_id)
-            
+            meta = get_meta(df, exec_id, exec_by)
+
             # For utilizing all columns:
             # cols, column_names_to_normalize = get_columns(df)
-            
+
             # For the chosen 9 columns:
             cols = ['i', 'j',
                     'fg_firstorder_Mean', 'bg_firstorder_Mean', 'fg_firstorder_RootMeanSquared',
@@ -130,14 +131,15 @@ def process(input, output, exec_id):
 
 
 if __name__ == "__main__":
-    # python3.7 pyrad_to_map.py ../input ../output 12345
+    # python3.7 pyrad_to_map.py ../input ../output 12345 someone@somewhere.com
     base = os.path.basename(__file__)
-    if len(sys.argv) != 4:
-        prRed('\nUsage:\n    python ' + base + ' input_dir output_dir exec_id')
-        sys.exit(1)
+    if len(sys.argv) != 5:
+        prRed('\nUsage:\n    python ' + base + ' input_dir output_dir exec_id exec_by')
+        exit(1)
 
     input = sys.argv[1]  # input
     output = sys.argv[2]  # output
     exec_id = sys.argv[3]  # execution id
-    process(input, output, exec_id)
+    exec_by = sys.argv[4]  # executed by
+    process(input, output, exec_id, exec_by)
     exit(0)

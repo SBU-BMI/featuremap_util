@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+PROGNAME=$(basename "$0")
+
+if [ "$#" -ne 2 ]; then
+  echo ""
+  echo "usage: "
+  echo "    ./$PROGNAME exec_id exec_by"
+  exit 1
+fi
+
+python /app/src/pyrad_to_map.py "/data/input" "/data/output" "$1" "$2"
+echo "$PROGNAME done."

@@ -10,7 +10,6 @@ import csv
 import glob
 import os
 import sys
-# from datetime import datetime
 
 import cv2
 import openslide
@@ -76,8 +75,6 @@ def get_patch_size1(filepath, w_png, h_png):
 
 
 def main(png_fol, out_fol, wsi_fol, slide_ext):
-#     startTime = datetime.now()
-
     # Iterate through pngs in input folder
     fns = [f for f in os.listdir(png_fol) if '.png' in f]
     for idx, filename in enumerate(fns):
@@ -136,17 +133,14 @@ def main(png_fol, out_fol, wsi_fol, slide_ext):
 
         f.close()
 
-#     print(os.path.basename(__file__) + ':', datetime.now() - startTime)
-
 
 if __name__ == "__main__":
-    # Check num args
+    # Check args
     if len(sys.argv) != 5:
         base = os.path.basename(__file__)
         print('\nUsage:\n    python ' + base + ' input_folder output_folder slide_folder slide_ext [tif, svs, etc]')
         sys.exit(1)
 
-    # Get arguments
     input_folder = sys.argv[1]  # input
     output_folder = sys.argv[2]  # output
     slide_folder = sys.argv[3]  # slide

@@ -1,12 +1,10 @@
 import json
 # import os
 import sys
-# from datetime import datetime
 
 
 # Write feature map
-def write_map_from_matrix(im, dim, filename, exec_id, bgr):
-    # startTime = datetime.now()
+def write_map_from_matrix(im, dim, filename, exec_id, exec_by, bgr):
     png_w = im.shape[1]
     png_h = im.shape[0]
 
@@ -38,7 +36,8 @@ def write_map_from_matrix(im, dim, filename, exec_id, bgr):
             "png_h": png_h,
             "patch_w": 200,
             "patch_h": 200,
-            "exec_id": exec_id
+            "exec_id": exec_id,
+            "executed_by": exec_by
         },
         "data": {
             "locations": {
@@ -64,4 +63,3 @@ def write_map_from_matrix(im, dim, filename, exec_id, bgr):
     except:
         print("Unexpected error:", sys.exc_info()[0])
         raise
-    # print(os.path.basename(__file__) + ':', datetime.now() - startTime)
