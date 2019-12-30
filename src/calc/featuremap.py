@@ -65,7 +65,6 @@ def write_map_from_matrix(im, dim, filename, exec_id, exec_by, bgr):
     except:
         print("Unexpected error:", sys.exc_info()[0])
         raise
-    # print(os.path.basename(__file__) + ':', datetime.now() - startTime)
 
 
 def has_header(my_file):

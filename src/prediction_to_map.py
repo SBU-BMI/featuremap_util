@@ -46,4 +46,4 @@ else:
 
     filename = output_dir + '/{}.png'.format(svs_name)
     # imageio.imwrite(filename, im)
-    write_map_from_matrix(im, [width, height], filename, exec_id, False)
+    write_map_from_matrix(im, [width, height], filename, exec_id, exec_by, False)
