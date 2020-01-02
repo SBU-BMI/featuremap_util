@@ -15,7 +15,8 @@ from calc.featuremap import write_map_from_matrix
 # CMD: python3.7 merge_cancer_til.py ../input/cancer ../input/til ../output ../wsi svs 12345
 base = os.path.basename(__file__)
 if len(sys.argv) != 8:
-    print('\nUsage:\n    python ' + base + ' cancer_pred_fol til_pred_fol output_fol wsi_fol slide_ext executionid executedby')
+    print(
+        '\nUsage:\n    python ' + base + ' cancer_pred_fol til_pred_fol output_fol wsi_fol slide_ext executionid executedby')
     exit(1)
 
 start_ind = 0

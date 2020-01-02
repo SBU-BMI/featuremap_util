@@ -13,7 +13,8 @@ from calc.featuremap import write_map_from_matrix
 
 base = os.path.basename(__file__)
 if len(sys.argv) != 9:
-    print('\nUsage:\n    python3.7 ' + base + ' svs_name width height pred_file color_file output_dir executionid executedby')
+    print(
+        '\nUsage:\n    python3.7 ' + base + ' svs_name width height pred_file color_file output_dir executionid executedby')
     exit(1)
 
 svs_name = sys.argv[1]
@@ -27,8 +28,8 @@ executedby = sys.argv[8]
 
 pred_data = []
 if has_header(pred_file):
-    print(pred_file, executionid, width, height)
-    classification(pred_file, executionid, width, height)
+    print(pred_file, executionid, executedby, width, height)
+    classification(pred_file, executionid, executedby, width, height)
 else:
     pred_data = np.loadtxt(pred_file).astype(np.float32)
     pred, necr, patch_size = get_labeled_im(pred_file)
@@ -44,6 +45,6 @@ else:
 
     im = np.swapaxes(im, 0, 1)  # Transpose
 
-filename = output_dir + '/{}.png'.format(svs_name)
-# imageio.imwrite(filename, im)
-write_map_from_matrix(im, [width, height], filename, executionid, executedby, False)
+    filename = output_dir + '/{}.png'.format(svs_name)
+    # imageio.imwrite(filename, im)
+    write_map_from_matrix(im, [width, height], filename, executionid, executedby, False)
