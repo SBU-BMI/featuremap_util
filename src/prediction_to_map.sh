@@ -10,7 +10,7 @@ error_exit() {
 
 if [ "$#" -ne 6 ]; then
   # CMD: ./prediction_to_map.sh ../input ../output ../wsi svs testEXEC someone@somewhere.com
-  echo "Usage: $0 /data/input /data/output /data/wsi svs exec_id exec_by" >&2
+  echo "Usage: $0 /data/input /data/output /data/wsi svs executionid executedby" >&2
   exit 1
 fi
 
@@ -23,8 +23,8 @@ HEAT_LOC="$1"
 output_dir="$2"
 SLIDES="$3"
 ext="$4"
-exec_id="$5"
-exec_by="$6"
+executionid="$5"
+executedby="$6"
 found=0
 
 color_files="$HEAT_LOC/color-*"
@@ -68,7 +68,7 @@ if [[ $found -eq 0 ]]; then
       grep "openslide.level\[0\].height" | awk '{print substr($2,2,length($2)-2);}')
 
     # Generate CSVs and PNGs.
-    python "$(pwd)/prediction_to_map.py" ${SVS} ${WIDTH} ${HEIGHT} ${PRED} ${COLOR} ${output_dir} ${exec_id} ${exec_by}
+    python "$(pwd)/prediction_to_map.py" ${SVS} ${WIDTH} ${HEIGHT} ${PRED} ${COLOR} ${output_dir} ${executionid} ${executedby}
   done
 fi
 

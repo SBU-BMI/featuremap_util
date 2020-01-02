@@ -43,7 +43,7 @@ def norm_ij_1(df):
     return df
 
 
-def get_meta_from_file(df, exec_id, exec_by):
+def get_meta_from_file(df, executionid, executedby):
     # Create JSON metadata
     imw = df['image_width'].iloc[0]  # at location 0, first row
     imh = df['image_height'].iloc[0]
@@ -56,8 +56,8 @@ def get_meta_from_file(df, exec_id, exec_by):
            "patch_h": str(ph),
            "png_w": str(np.ceil(imw / pw).astype(int)),
            "png_h": str(np.ceil(imh / ph).astype(int)),
-           "exec_id": str(exec_id),
-           "executed_by": str(exec_by)}
+           "executionid": str(executionid),
+           "executedby": str(executedby)}
 
     return obj
 
@@ -85,7 +85,7 @@ def get_meta_from_file(df, exec_id, exec_by):
 #     return column_names, column_names_to_normalize
 
 
-def process(input, output, exec_id, exec_by):
+def process(input, output, executionid, executedby):
     # Do for all files in directory:
     for filename in os.listdir(input):
         if filename.endswith(".csv"):
@@ -97,7 +97,7 @@ def process(input, output, exec_id, exec_by):
             except Exception as ex:
                 prRed('image_width column not found')
                 continue
-            meta = get_meta_from_file(df, exec_id, exec_by)
+            meta = get_meta_from_file(df, executionid, executedby)
 
             # For utilizing all columns:
             # cols, column_names_to_normalize = get_columns(df)
@@ -134,12 +134,12 @@ if __name__ == "__main__":
     # python3.7 pyrad_to_map.py ../input ../output testEXEC someone@somewhere.com
     base = os.path.basename(__file__)
     if len(sys.argv) != 5:
-        prRed('\nUsage:\n    python ' + base + ' input_dir output_dir exec_id exec_by')
+        prRed('\nUsage:\n    python ' + base + ' input_dir output_dir executionid executedby')
         exit(1)
 
     input = sys.argv[1]  # input
     output = sys.argv[2]  # output
-    exec_id = sys.argv[3]  # execution id
-    exec_by = sys.argv[4]  # executed by
-    process(input, output, exec_id, exec_by)
+    executionid = sys.argv[3]  # execution id
+    executedby = sys.argv[4]  # executed by
+    process(input, output, executionid, executedby)
     exit(0)
