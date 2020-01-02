@@ -211,7 +211,7 @@ def classification(text_file, executionid, executedby, imw, imh):
 
 if __name__ == "__main__":
     # classification('../input/prediction-001738-000001_01_20180504', 'testEXEC', someone@somewhere.com, 80900, 67432)
-    # python3.7 pyrad_to_map.py ../input ../output 12345 testEXEC someone@somewhere.com
+    # python3.7 pyrad_to_map.py ../input ../output testEXEC someone@somewhere.com
     base = os.path.basename(__file__)
     if len(sys.argv) != 5:
         prRed('\nUsage:\n    python ' + base + ' input_dir output_dir executionid executedby')
