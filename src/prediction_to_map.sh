@@ -10,7 +10,7 @@ error_exit() {
 
 if [ "$#" -ne 6 ]; then
   # CMD: ./prediction_to_map.sh ../input ../output ../wsi svs testEXEC someone@somewhere.com
-  echo "Usage: $0 /data/input /data/output /data/wsi svs executionid executedby email_addr" >&2
+  echo "Usage: $0 /data/input /data/output /data/wsi svs executionid executedby" >&2
   exit 1
 fi
 
