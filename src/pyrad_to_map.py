@@ -137,9 +137,9 @@ if __name__ == "__main__":
         prRed('\nUsage:\n    python ' + base + ' input_dir output_dir executionid executedby')
         exit(1)
 
-    input = sys.argv[1]  # input
-    output = sys.argv[2]  # output
-    executionid = sys.argv[3]  # execution id
-    executedby = sys.argv[4]  # executed by
+    input = sys.argv[1]
+    output = sys.argv[2]
+    executionid = sys.argv[3]
+    executedby = sys.argv[4]
     process(input, output, executionid, executedby)
     exit(0)
