@@ -67,7 +67,7 @@ def norm_ij(df, cols, patch_size):
     return df
 
 
-def get_meta_from_file(df, exec_id):
+def get_meta_from_file(df, executionid):
     # Create JSON metadata
     imw = df['image_width'].iloc[0]  # at location 0, first row
     imh = df['image_height'].iloc[0]
@@ -80,19 +80,19 @@ def get_meta_from_file(df, exec_id):
            "patch_h": str(ph),
            "png_w": str(np.ceil(imw / pw).astype(int)),
            "png_h": str(np.ceil(imh / ph).astype(int)),
-           "exec_id": str(exec_id)}
+           "executionid": str(executionid)}
 
     return obj
 
 
-def get_meta(imw, imh, pw, ph, exec_id):
+def get_meta(imw, imh, pw, ph, executionid):
     obj = {"img_width": str(imw),
            "img_height": str(imh),
            "patch_w": str(pw),
            "patch_h": str(ph),
            "png_w": str(np.ceil(imw / pw).astype(int)),
            "png_h": str(np.ceil(imh / ph).astype(int)),
-           "exec_id": str(exec_id)}
+           "executionid": str(executionid)}
 
     return obj
 
@@ -120,8 +120,8 @@ def get_meta(imw, imh, pw, ph, exec_id):
 #     return column_names, column_names_to_normalize
 
 
-def process(df, filename, output, exec_id):
-    meta = get_meta_from_file(df, exec_id)
+def process(df, filename, output, executionid):
+    meta = get_meta_from_file(df, executionid)
 
     # For utilizing all columns:
     # cols, column_names_to_normalize = get_columns(df)
@@ -156,7 +156,7 @@ def process(df, filename, output, exec_id):
         df.to_csv(f, mode='a', header=False, index=False)
 
 
-def classification(text_file, exec_id, imw, imh):
+def classification(text_file, executionid, imw, imh):
     # Check for empty file
     if os.stat(text_file).st_size == 0:
         print('File is empty:', text_file)
@@ -181,7 +181,7 @@ def classification(text_file, exec_id, imw, imh):
         patch_size = (x.min() + x.max()) / len(np.unique(x))
 
         df = pd.read_csv(text_file, delim_whitespace=True)
-        meta = get_meta(imw, imh, patch_size, patch_size, exec_id)
+        meta = get_meta(imw, imh, patch_size, patch_size, executionid)
 
         df = norm_ij(df, df.columns, patch_size)
 
@@ -213,12 +213,12 @@ if __name__ == "__main__":
     # python3.7 pyrad_to_map.py ../input ../output 12345
     base = os.path.basename(__file__)
     if len(sys.argv) != 4:
-        prRed('\nUsage:\n    python ' + base + ' input_dir output_dir exec_id')
+        prRed('\nUsage:\n    python ' + base + ' input_dir output_dir executionid')
         sys.exit(1)
 
     input = sys.argv[1]  # input
     output = sys.argv[2]  # output
-    exec_id = sys.argv[3]  # execution id
+    executionid = sys.argv[3]  # execution id
 
     # Do for all files in directory:
     for filename in os.listdir(input):
@@ -231,6 +231,6 @@ if __name__ == "__main__":
             except Exception as ex:
                 prRed('image_width column not found')
                 continue
-            process(data, filename, output, exec_id)
+            process(data, filename, output, executionid)
 
     exit(0)

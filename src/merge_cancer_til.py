@@ -15,7 +15,7 @@ from calc.featuremap import write_map_from_matrix
 # CMD: python3.7 merge_cancer_til.py ../input/cancer ../input/til ../output ../wsi svs 12345
 base = os.path.basename(__file__)
 if len(sys.argv) != 8:
-    print('\nUsage:\n    python ' + base + ' cancer_pred_fol til_pred_fol output_fol wsi_fol slide_ext exec_id exec_by')
+    print('\nUsage:\n    python ' + base + ' cancer_pred_fol til_pred_fol output_fol wsi_fol slide_ext executionid executedby')
     exit(1)
 
 start_ind = 0
@@ -27,8 +27,8 @@ til_pred_fol = sys.argv[2]  # folder path containing the prediction-xxx files fo
 wsi_fol = sys.argv[4]  # folder path containing all the WSIs
 output_folder = sys.argv[3]  # output folder
 slide_extension = '.' + sys.argv[5]  # extension of the slide, can be .svs, .tiff, etc.
-exec_id = sys.argv[6]
-exec_by = sys.argv[7]
+executionid = sys.argv[6]
+executedby = sys.argv[7]
 
 if not os.path.exists(output_folder):
     os.mkdir(output_folder)
@@ -178,7 +178,7 @@ def process_file(pred_fn):
     tissue[tissue >= 12] = 255
     combined[:, :, 0] = tissue
     # cv2.imwrite(res_file_png, combined)
-    write_map_from_matrix(combined, [width, height], res_file_png, exec_id, exec_by, True)
+    write_map_from_matrix(combined, [width, height], res_file_png, executionid, executedby, True)
 
 
 pool = mp.Pool(processes=8)

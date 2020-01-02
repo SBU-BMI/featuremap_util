@@ -66,7 +66,7 @@ def norm_ij(df, cols, patch_size):
     return df
 
 
-def get_meta_from_file(df, exec_id, exec_by):
+def get_meta_from_file(df, executionid, executedby):
     # Create JSON metadata
     imw = df['image_width'].iloc[0]  # at location 0, first row
     imh = df['image_height'].iloc[0]
@@ -79,21 +79,21 @@ def get_meta_from_file(df, exec_id, exec_by):
            "patch_h": str(ph),
            "png_w": str(np.ceil(imw / pw).astype(int)),
            "png_h": str(np.ceil(imh / ph).astype(int)),
-           "exec_id": str(exec_id),
-           "executed_by": str(exec_by)}
+           "executionid": str(executionid),
+           "executedby": str(executedby)}
 
     return obj
 
 
-def get_meta(imw, imh, pw, ph, exec_id, exec_by):
+def get_meta(imw, imh, pw, ph, executionid, executedby):
     obj = {"img_width": str(imw),
            "img_height": str(imh),
            "patch_w": str(pw),
            "patch_h": str(ph),
            "png_w": str(np.ceil(imw / pw).astype(int)),
            "png_h": str(np.ceil(imh / ph).astype(int)),
-           "exec_id": str(exec_id),
-           "executed_by": str(exec_by),
+           "executionid": str(executionid),
+           "executedby": str(executedby),
            "type": "gleason"}
 
     return obj
@@ -122,8 +122,8 @@ def get_meta(imw, imh, pw, ph, exec_id, exec_by):
 #     return column_names, column_names_to_normalize
 
 
-def process(df, filename, output, exec_id, exec_by):
-    meta = get_meta_from_file(df, exec_id, exec_by)
+def process(df, filename, output, executionid, executedby):
+    meta = get_meta_from_file(df, executionid, executedby)
 
     # For utilizing all columns:
     # cols, column_names_to_normalize = get_columns(df)
@@ -157,7 +157,7 @@ def process(df, filename, output, exec_id, exec_by):
         df.to_csv(f, mode='a', header=False, index=False)
 
 
-def classification(text_file, exec_id, exec_by, imw, imh):
+def classification(text_file, executionid, executedby, imw, imh):
     # Check for empty file
     if os.stat(text_file).st_size == 0:
         print('File is empty:', text_file)
@@ -182,7 +182,7 @@ def classification(text_file, exec_id, exec_by, imw, imh):
         patch_size = (x.min() + x.max()) / len(np.unique(x))
 
         df = pd.read_csv(text_file, delim_whitespace=True)
-        meta = get_meta(imw, imh, patch_size, patch_size, exec_id, exec_by)
+        meta = get_meta(imw, imh, patch_size, patch_size, executionid, executedby)
 
         df = norm_ij(df, df.columns, patch_size)
 
@@ -214,13 +214,13 @@ if __name__ == "__main__":
     # python3.7 pyrad_to_map.py ../input ../output 12345 testEXEC someone@somewhere.com
     base = os.path.basename(__file__)
     if len(sys.argv) != 5:
-        prRed('\nUsage:\n    python ' + base + ' input_dir output_dir exec_id exec_by')
+        prRed('\nUsage:\n    python ' + base + ' input_dir output_dir executionid executedby')
         exit(1)
 
-    input = sys.argv[1]  # input
-    output = sys.argv[2]  # output
-    exec_id = sys.argv[3]  # execution id
-    exec_by = sys.argv[4]  # executed by
+    input = sys.argv[1]
+    output = sys.argv[2]
+    executionid = sys.argv[3]
+    executedby = sys.argv[4]
 
     # Do for all files in directory:
     for filename in os.listdir(input):
@@ -233,6 +233,6 @@ if __name__ == "__main__":
             except Exception as ex:
                 prRed('image_width column not found')
                 continue
-            process(df, filename, output, exec_id, exec_by)
+            process(df, filename, output, executionid, executedby)
 
     exit(0)

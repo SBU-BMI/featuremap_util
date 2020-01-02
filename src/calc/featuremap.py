@@ -6,7 +6,7 @@ import re
 
 
 # Write feature map
-def write_map_from_matrix(im, dim, filename, exec_id, exec_by, bgr):
+def write_map_from_matrix(im, dim, filename, executionid, executedby, bgr):
     png_w = im.shape[1]
     png_h = im.shape[0]
 
@@ -38,8 +38,8 @@ def write_map_from_matrix(im, dim, filename, exec_id, exec_by, bgr):
             "png_h": png_h,
             "patch_w": 200,
             "patch_h": 200,
-            "exec_id": exec_id,
-            "executed_by": exec_by
+            "executionid": executionid,
+            "executedby": executedby
         },
         "data": {
             "locations": {
