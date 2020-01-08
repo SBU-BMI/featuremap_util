@@ -46,5 +46,6 @@ try:
 except ValueError as err:
     print(pred_file)
     print("ValueError: {0}".format(err))
-except:
-    print("Error:", sys.exc_info()[0])
+except Exception as ex:
+    # print("Error:", sys.exc_info()[0])
+    print("Error: {0}".format(ex))
