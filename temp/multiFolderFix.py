@@ -1,9 +1,9 @@
 def find_files(filepath):
     '''
-    We're creating a shell script (findem.sh) based on input:
+    We're creating a shell script (images_to_find.sh) based on input:
     ls -l | awk '{print $9}' > ~/images_to_find.list
     Find/replace when necessary. "prediction-"
-    ./findem.sh > foundem.out
+    ./images_to_find.sh > images_found.out
     '''
     print("dir=\"/path/to/images\"")
     with open(filepath) as fp:
@@ -43,4 +43,4 @@ def makeFolders(filepath):
                                                                      "") + " -exec mv -- \"{}\" ./" + dir + "/ \;")
 
 
-# makeFolders("foundem.out")  # We found the images we were looking for.
+# makeFolders("images_found.out")  # We found the images we were looking for.
