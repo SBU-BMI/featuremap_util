@@ -19,6 +19,11 @@ def find_files(filepath):
 # find_files('images_to_find.list')  # Start here.
 
 
+def prt_ln(fname, dir):
+    print("find . -name " + "prediction-" + fname.replace(".tif", "") + " -exec mv -- \"{}\" ./" + dir + "/ \;")
+    print("find . -name " + "color-" + fname.replace(".tif", "") + " -exec mv -- \"{}\" ./" + dir + "/ \;")
+
+
 def makeFolders(filepath):
     '''
     We're creating a script (make_move.sh)
@@ -34,15 +39,14 @@ def makeFolders(filepath):
             if dir == x[5]:
                 # Same subdirectory
                 # Given that the input data is local, find input prediction file and move to subfolder
-                print("find . -name " + "prediction-" + x[6].replace(".tif", "") + " -exec mv -- \"{}\" ./" + x[
-                    5] + "/ \;")
+                prt_ln(x[6], x[5])
+
             else:
                 # New subdirectory!
                 # Create subfolder
                 dir = x[5]
                 print("mkdir " + dir)
-                print("find . -name " + "prediction-" + x[6].replace(".tif",
-                                                                     "") + " -exec mv -- \"{}\" ./" + dir + "/ \;")
+                prt_ln(x[6], dir)
 
 
 # makeFolders("images_found.out")  # We found the images we were looking for.
