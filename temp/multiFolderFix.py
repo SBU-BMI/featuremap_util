@@ -9,7 +9,7 @@ def find_files(filepath):
     with open(filepath) as fp:
         for line in fp:
             line = line.rstrip()
-            # step 1 (for prediction):
+            # step 1 (for prediction): Fix images_to_find.list
             # if "color" in line:
             #     print(line.replace("color-", ""))
             # step 2:
