@@ -32,10 +32,12 @@ def makeFolders(filepath):
             line = line.rstrip()
             x = line.split("/")
             if dir == x[5]:
+                # Same subdirectory
                 # Given that the input data is local, find input prediction file and move to subfolder
                 print("find . -name " + "prediction-" + x[6].replace(".tif", "") + " -exec mv -- \"{}\" ./" + x[
                     5] + "/ \;")
             else:
+                # New subdirectory!
                 # Create subfolder
                 dir = x[5]
                 print("mkdir " + dir)
