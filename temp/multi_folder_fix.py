@@ -20,8 +20,12 @@ def find_files(filepath):
 
 
 def prt_ln(fname, dir):
-    print("find . -name " + "prediction-" + fname.replace(".tif", "") + " -exec mv -- \"{}\" ./" + dir + "/ \;")
-    print("find . -name " + "color-" + fname.replace(".tif", "") + " -exec mv -- \"{}\" ./" + dir + "/ \;")
+    fname = fname.replace(".tif", "")
+    # print("find . -name " + "prediction-" + fname + " -exec mv -- \"{}\" ./" + dir + "/ \;")
+    # print("find . -name " + "color-" + fname + " -exec mv -- \"{}\" ./" + dir + "/ \;")
+    print("mv prediction-" + fname + " ./" + dir)
+    print("mv prediction-" + fname + ".low_res ./" + dir)
+    print("mv color-" + fname + " ./" + dir)
 
 
 def makeFolders(filepath):
@@ -36,17 +40,19 @@ def makeFolders(filepath):
         for line in fp:
             line = line.rstrip()
             x = line.split("/")
-            if dir == x[5]:
+            pos_file = len(x) - 1
+            pos_dir = len(x) - 2
+            if dir == x[pos_dir]:
                 # Same subdirectory
                 # Given that the input data is local, find input prediction file and move to subfolder
-                prt_ln(x[6], x[5])
+                prt_ln(x[pos_file], x[pos_dir])
 
             else:
                 # New subdirectory!
                 # Create subfolder
-                dir = x[5]
+                dir = x[pos_dir]
                 print("mkdir " + dir)
-                prt_ln(x[6], dir)
+                prt_ln(x[pos_file], dir)
 
 
 # makeFolders("images_found.out")  # We found the images we were looking for.
