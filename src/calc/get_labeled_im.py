@@ -3,6 +3,15 @@ import numpy as np
 
 # Extract data from prediction file
 def get_labeled_im(pred_f, maxx, maxy):
+    '''
+    Using the x.max and y.max from the color- file to populate the til and nec matrices.
+    It is more reliable than doing so by using the prediction- file
+    because there are some tiles that got skipped when doing the prediction.
+    :param pred_f:
+    :param maxx:
+    :param maxy:
+    :return:
+    '''
     pred_data = np.loadtxt(pred_f).astype(np.float32)
     # 4 columns in prediction file
     x = pred_data[:, 0]  # x
