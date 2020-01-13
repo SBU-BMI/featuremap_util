@@ -26,8 +26,8 @@ executedby = sys.argv[8]
 
 try:
     # Get data from files
-    pred, necr, patch_size = get_labeled_im(pred_file)
-    whiteness, blackness, redness = get_wbr_im(color_file)
+    whiteness, blackness, redness, maxx, maxy = get_wbr_im(color_file)
+    pred, necr, patch_size = get_labeled_im(pred_file, maxx, maxy)
 
     # Initialize m x n x c matrix
     im = np.zeros((pred.shape[0], pred.shape[1], 3), dtype=np.uint8)

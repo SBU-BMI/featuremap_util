@@ -30,4 +30,4 @@ def get_wbr_im(color_file):
         blackness[int(x[iter] - 1), int(y[iter] - 1)] = b[iter]
         redness[int(x[iter] - 1), int(y[iter] - 1)] = r[iter]
 
-    return whiteness, blackness, redness
+    return whiteness, blackness, redness, maxx, maxy
