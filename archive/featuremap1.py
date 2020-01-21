@@ -28,6 +28,9 @@ def write_map_from_matrix(im, dim, filename, executionid, executedby, bgr):
                 g_arr.append(int(im[y, x][idx[1]]))
                 b_arr.append(int(im[y, x][idx[2]]))
 
+    # TODO: Note type:gleason
+    # Note: Instead of TIL,Cancer,Tissue -> CLASS,null1,null2
+    # Distinguish between the nulls in case we need to change the title
     my_obj = {
         "metadata": {
             "img_width": dim[0],
