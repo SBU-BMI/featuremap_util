@@ -89,7 +89,7 @@ def process(input, output, executionid, executedby):
     # Do for all files in directory:
     for filename in os.listdir(input):
         if filename.endswith(".csv"):
-            print("File:", filename)
+            # print("File:", filename)
             fin = os.path.join(input, filename)
             try:
                 df = pd.read_csv(fin)
