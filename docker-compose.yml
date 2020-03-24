@@ -1,0 +1,12 @@
+version: '3.5'
+
+services:
+  reports:
+    build:
+      context: .
+    image: quip_reports
+    container_name: quip-reports
+    volumes:
+      - $(pwd)/input:/data/input
+      - $(pwd)/output:/data/output
+      - $(pwd)/wsi:/data/wsi
