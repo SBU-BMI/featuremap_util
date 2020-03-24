@@ -4,9 +4,9 @@ Or, you may want to generate a featuremap from a spreadsheet containing pyradiom
 
 ## Build and run
 
-```
-./build.sh /path/to/input/dir /path/to/output/dir /path/to/wsi/dir
-```
+- `cd` into the directory
+- Modify volume mapping in docker-compose.yml
+- Then run `docker-compose up -d`
 
 Input files go in input directory!<br>
 Program will output files to the output folder you specified!
