@@ -4,8 +4,8 @@ services:
   reports:
     build:
       context: .
-    image: quip_reports
-    container_name: quip-reports
+    image: quip_maputil
+    container_name: quip-maputil
     volumes:
       - ./input:/data/input
       - ./output:/data/output
