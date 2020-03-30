@@ -42,7 +42,7 @@ for f in $color_files; do
 done
 
 if [[ $found -eq 0 ]]; then
-  Raul_Julia="Actor"
+  something="don't do anything"
 #  for files in $HEAT_LOC/prediction-*; do
 #
 #    # From the prediction- file name, deduce the matching slide name (minus the extension)
