@@ -2,7 +2,7 @@
 
 PROGNAME=$(basename "$0")
 
-if [ "$#" -ne 3 ]; then
+if [ "$#" -lt 3 ]; then
   echo ""
   echo "usage: "
   echo "    ./$PROGNAME executionid executedby wsi_type"
