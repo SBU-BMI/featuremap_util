@@ -10,7 +10,7 @@ error_exit() {
 
 if [ "$#" -ne 6 ]; then
   # CMD: ./prediction_to_map.sh ../input ../output ../wsi svs testEXEC someone@somewhere.com
-  echo "Usage: $0 /data/input /data/output /data/wsi svs executionid executedby" >&2
+  echo "Usage: $0 svs executionid executedby" >&2
   exit 1
 fi
 
@@ -19,15 +19,16 @@ fi
 #   prediction-${slide_id}
 # For example:
 #   prediction-TCGA-XX-XXXX-01Z-00-DX1
-HEAT_LOC="$1"
-output_dir="$2"
-SLIDES="$3"
-ext="$4"
-executionid="$5"
-executedby="$6"
+HEAT_LOC="/data/input"
+output_dir="/data/output"
+SLIDES="/data/wsi"
+
+ext="$1"
+executionid="$2"
+executedby="$3"
 found=0
 
-echo "args: $1 $2 $3 $4 $5 $6"
+echo "args: $1 $2 $3"
 
 color_files="$HEAT_LOC/color-*"
 for f in $color_files; do
@@ -41,36 +42,8 @@ for f in $color_files; do
   break
 done
 
-if [[ $found -eq 0 ]]; then
-  something="don't do anything"
-#  for files in $HEAT_LOC/prediction-*; do
-#
-#    # From the prediction- file name, deduce the matching slide name (minus the extension)
-#    SVS=$(echo ${files} | awk -F'/' '{print $NF}' | awk -F'prediction-' '{print $2}')
-#
-#    # Find the slide
-#    FILE="$(ls -1 ${SLIDES}/${SVS}*.$ext)"
-#    if [ -f "$FILE" ]; then
-#      SVS_FILE=$(ls -1 ${SLIDES}/${SVS}*.$ext | head -n 1)
-#    fi
-#
-#    if [ -z "$SVS_FILE" ]; then
-#      echo "Could not find slide."
-#      continue
-#    fi
-#
-#    # Get width and height
-#    WIDTH=$(openslide-show-properties ${SVS_FILE} |
-#      grep "openslide.level\[0\].width" | awk '{print substr($2,2,length($2)-2);}')
-#    HEIGHT=$(openslide-show-properties ${SVS_FILE} |
-#      grep "openslide.level\[0\].height" | awk '{print substr($2,2,length($2)-2);}')
-#
-#    # Generate CSVs and PNGs.
-#    # python "$(pwd)/prediction_to_map.py" ${SVS} ${WIDTH} ${HEIGHT} ${files} "dummy" ${output_dir} ${executionid} ${executedby}
-#    python "$(pwd)/prediction_to_map.py" $SVS_FILE $WIDTH $HEIGHT $files "dummy" $output_dir $executionid $executedby
-#
-#  done
-else
+if [[ $found -eq 1 ]]; then
+
   # We get the slides based on what's in this heatmap_txt folder
   for files in $HEAT_LOC/color-*; do
 

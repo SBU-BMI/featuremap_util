@@ -20,7 +20,7 @@ width = int(sys.argv[2])
 height = int(sys.argv[3])
 pred_file = sys.argv[4]
 color_file = sys.argv[5]
-output_dir = sys.argv[6]
+output_dir = "/data/output"
 executionid = sys.argv[7]
 executedby = sys.argv[8]
 
