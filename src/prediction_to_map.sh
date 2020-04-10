@@ -8,7 +8,7 @@ error_exit() {
   exit 1
 }
 
-if [ "$#" -ne 6 ]; then
+if [ "$#" -ne 3 ]; then
   # CMD: ./prediction_to_map.sh ../input ../output ../wsi svs testEXEC someone@somewhere.com
   echo "Usage: $0 svs executionid executedby" >&2
   exit 1
