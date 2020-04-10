@@ -1,5 +1,5 @@
 import json
-# import os
+import os
 import sys
 
 
@@ -28,6 +28,14 @@ def write_map_from_matrix(im, dim, filename, executionid, executedby, bgr):
                 g_arr.append(int(im[y, x][idx[1]]))
                 b_arr.append(int(im[y, x][idx[2]]))
 
+    feature = os.getenv('FEAT')
+    if 'TIL' in feature:
+        foo = "Cancer"
+        bar = "Tissue"
+    else:
+        foo = "null1"
+        bar = "null2"
+
     my_obj = {
         "metadata": {
             "img_width": dim[0],
@@ -45,9 +53,9 @@ def write_map_from_matrix(im, dim, filename, executionid, executedby, bgr):
                 "j": y_arr
             },
             "features": {
-                'TIL': r_arr,
-                'Cancer': g_arr,
-                'Tissue': b_arr
+                feature: r_arr,
+                foo: g_arr,
+                bar: b_arr
             }
         }
     }

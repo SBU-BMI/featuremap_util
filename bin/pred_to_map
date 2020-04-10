@@ -16,6 +16,8 @@ executedby="$2"
 wsi_type="$3"
 if [ "$#" -eq 4 ]; then
   env FEAT="$4"
+else
+  env FEAT="TIL"
 fi
 
 /app/src/prediction_to_map.sh "$wsi_type" "$executionid" "$executedby"
