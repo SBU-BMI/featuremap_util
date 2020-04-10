@@ -33,8 +33,12 @@ def write_map_from_matrix(im, dim, filename, executionid, executedby, bgr):
         foo = "Cancer"
         bar = "Tissue"
     else:
-        foo = "null1"
-        bar = "null2"
+        if 'Cancer' in feature:
+            foo = "TIL"
+            bar = "Tissue"
+        else:
+            foo = "null1"
+            bar = "null2"
 
     my_obj = {
         "metadata": {
