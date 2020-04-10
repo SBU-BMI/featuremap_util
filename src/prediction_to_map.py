@@ -21,8 +21,8 @@ height = int(sys.argv[3])
 pred_file = sys.argv[4]
 color_file = sys.argv[5]
 output_dir = "/data/output"
-executionid = sys.argv[7]
-executedby = sys.argv[8]
+executionid = sys.argv[6]
+executedby = sys.argv[7]
 
 try:
     # Get data from files
