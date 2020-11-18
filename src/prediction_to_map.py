@@ -10,7 +10,7 @@ from calc.get_wbr_im import get_wbr_im
 from calc.featuremap import write_map_from_matrix
 
 base = os.path.basename(__file__)
-if len(sys.argv) != 9:
+if len(sys.argv) < 8:
     print("Usage:")
     print("python3.7 ' + base + ' svs_name width height pred_file color_file output_dir executionid executedby")
     exit(1)
