@@ -8,8 +8,8 @@ Or, you may want to generate a featuremap from a spreadsheet containing pyradiom
 - Modify volume mapping in docker-compose.yml
 - Then run `docker-compose up -d`
 
-Input files go in input directory!<br>
-Program will output files to the output folder you specified!
+Input files go in input directory.<br>
+Program will output files to the output folder you specified.
 <br>
 
 
@@ -97,20 +97,3 @@ The output data format is in JSON.
     }
 }
 ```
-
-
-<!--
-### Build
-
-```
-docker build -t featuremap_util .
-```
-
-### Run
-```
-docker run --name quip-maputil -v $(pwd)/input:/data/input -v $(pwd)/output:/data/output -itd featuremap_util
-
-./build.sh $(pwd)/input $(pwd)/output $(pwd)/wsi
-
-```
--->
