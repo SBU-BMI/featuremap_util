@@ -25,7 +25,7 @@ executionid = sys.argv[6]
 executedby = sys.argv[7]
 
 try:
-    # Get data from files
+    # Get data from color and prediction files
     whiteness, blackness, redness, maxx, maxy = get_wbr_im(color_file)
     pred, necr, patch_size = get_labeled_im(pred_file, maxx, maxy)
 
