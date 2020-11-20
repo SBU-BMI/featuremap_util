@@ -38,6 +38,23 @@ wsi type can be svs, tif, scn, etc.
 ```
 nohup docker exec quip-maputil pred_to_map exec_id exec_by wsi_type &
 ```
+
+Traditionally, the channels are labelled as:
+```
+red = TIL
+green = Cancer
+blue = Tissue
+```
+
+### Optional 4th parameter
+If it's a cancer-only prediction, add `Cancer` so that the program knows to put data in the correct channel.
+
+```
+nohup docker exec quip-maputil pred_to_map exec_id exec_by wsi_type Cancer &
+```
+
+<!-- Semi-related: Every time we add a new type (Pyradiomics, Gleason, etc.), quip admin has to add it to quip (field_map_type.map.node) -->
+
 <br>
 
 
@@ -97,7 +114,8 @@ The output data format is in JSON.
         "png_h": number,
         "patch_w": number,
         "patch_h": number,
-        "exec_id": exec_id
+        "exec_id": exec_id,
+        "executedby": executedby
     },
     "data": {
         "locations": {
