@@ -20,8 +20,8 @@ done
 
 ## Build and run
 
-- `cd` into the directory
-- Modify volume mapping in docker-compose.yml
+- `cd` into this directory
+- Modify volume mapping in docker-compose.yml (particularly `wsi` - point it to the appropriate folder under `images` on the server.
 - Then run `docker-compose up -d`
 
 Put input files in the [input](input) directory.<br>
