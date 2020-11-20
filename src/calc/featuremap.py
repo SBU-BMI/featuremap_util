@@ -40,6 +40,7 @@ def write_map_from_matrix(im, dim, filename, executionid, executedby, bgr):
             foo = "null1"
             bar = "null2"
 
+    # TODO: Need a 'type' field to identify the new types; such as: Pyradiomics, Gleason, etc.
     my_obj = {
         "metadata": {
             "img_width": dim[0],
