@@ -101,6 +101,11 @@ docker exec quip-maputil csv_to_json
 ```
 <br>
 
+## Upload to server
+Use [ImageLoader](https://github.com/SBU-BMI/ImageLoader) to load them.
+
+Note: Because ImageLoader does not yet handle `execution id`, you would add that info to PathDB via `curl` scripting.
+
 
 ## Output data format
 The output data format is in JSON.
