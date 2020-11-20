@@ -2,15 +2,30 @@
 Generate featuremaps.  Most of the time you'll be converting prediction files to featuremap files.
 Or, you may want to generate a featuremap from a spreadsheet containing pyradiomics data.
 
+## Need to know
+* Who's algorithm is it (who ran it)?
+* What is the execution id?
+* And sometimes – where are the color files?
+
+You can usually answer the question "who's algorithm" and "execution id" by looking at `heatmap_json` output.
+
+If there are no color files, run this script in the input folder:
+
+```
+for i in $(ls prediction-*); do
+  a=$(echo "$i" | awk -F 'prediction-' '{print $2}')
+  awk '{ if ($3>0.0) { print $1" "$2" 100.0 50.0 0.0" } else { print $1" "$2" 1.0 50.0 0.0" } }' "$i" >color-"$a"
+done
+```
+
 ## Build and run
 
 - `cd` into the directory
 - Modify volume mapping in docker-compose.yml
 - Then run `docker-compose up -d`
 
-Input files go in input directory.<br>
-Program will output files to the output folder you specified.
-<br>
+Put input files in the [input](input) directory.<br>
+Put output files in the [output](output) directory.<br>
 
 
 ## Usage
