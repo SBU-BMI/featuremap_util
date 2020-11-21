@@ -70,5 +70,5 @@ docker exec quip-maputil pyrad_to_map exec_id exec_by
 ## Upload to server
 Use [ImageLoader](https://github.com/SBU-BMI/ImageLoader) to load them.
 
-Note: Because ImageLoader does not yet handle `execution id`, you would add that info to the host via HTTP `PATCH` calls.
+Note: Because ImageLoader does not yet handle `execution id`, one could add that info to the host via HTTP `PATCH` calls.
 <br>
