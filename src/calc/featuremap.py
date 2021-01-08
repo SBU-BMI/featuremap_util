@@ -36,6 +36,8 @@ def write_map_from_matrix(im, dim, filename, executionid, executedby, bgr):
         if 'Cancer' in feature:
             foo = "TIL"
             bar = "Tissue"
+            # foo = "null1" # If Classified (3 class, 6 class, etc.) then uncomment null1, null2, and add type (see below).
+            # bar = "null2"
         else:
             foo = "null1"
             bar = "null2"
@@ -51,6 +53,7 @@ def write_map_from_matrix(im, dim, filename, executionid, executedby, bgr):
             "patch_h": 200,
             "executionid": executionid,
             "executedby": executedby
+            # ,"type": "resnet34_probability" # If classified, uncomment and modify line.
         },
         "data": {
             "locations": {

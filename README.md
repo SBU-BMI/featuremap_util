@@ -25,6 +25,9 @@ done
 - Then run `docker-compose up -d`
 
 Put input files in the [input](input) directory.<br>
+Normal TIL/Cancer input: heatmap_txt<br>
+Classified cancer input: heatmap_txt_3classes_separate_class<br>
+...<br>
 The program will output files to the [output](output) directory.<br>
 <!-- IT'S USUALLY A GOOD IDEA TO TAG AN ABBREVIATED EXECID TO THE END OF THE FILENAMES SO YOU CAN DISTINGUISH THEM FROM OTHER FILES WITH THE SAME NAME -->
 
